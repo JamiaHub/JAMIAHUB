@@ -986,7 +986,7 @@ const Community = () => {
                     >
                       <div className="relative h-48 overflow-hidden">
                         <img
-                          src={`${BASE_URL}${event.image}`}
+                          src={event.image}
                           alt={event.title}
                           className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
                         />
@@ -1063,7 +1063,7 @@ const Community = () => {
               >
                 <div className="relative h-48 overflow-hidden">
                   <img
-                    src={`${BASE_URL}${blog.image}`}
+                    src={blog.image}
                     alt={blog.title}
                     className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
                   />
@@ -1113,7 +1113,7 @@ const Community = () => {
               {/* Header */}
               <div className=" top-0 z-10 relative">
                 <img
-                  src={`${BASE_URL}${selectedBlog.image}`}
+                  src={selectedBlog.image}
                   alt={selectedBlog.title}
                   className="w-full h-64 object-cover rounded-t-2xl"
                 />
