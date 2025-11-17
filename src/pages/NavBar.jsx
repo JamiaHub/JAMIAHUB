@@ -1,11 +1,11 @@
 import { useState } from "react";
-import useAuthUser from "../hook/useAuthUser";
-import { useQueryClient, useMutation } from '@tanstack/react-query'
-import { useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 import toast from "react-hot-toast";
-import { axiosInstance } from '../lib/axios'
+import { axiosInstance } from '../lib/axios';
 import HolidayCalendar from "../components/HolidayCalender";
 import { Calendar } from "lucide-react";
+import useAuthUser from "../hook/useAuthUser";
 
 const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -48,9 +48,9 @@ const NavBar = () => {
   return (
     <>
       <nav className="flex items-center justify-between px-8 py-4 bg-gradient-to-br from-purple-900/20 via-black to-pink-900/20 shadow-2xl rounded-b-2xl relative backdrop-blur-2xl border-b-4 border-purple-500/50 animate-fade-in z-50">
-        <span className="tracking-wide drop-shadow-lg text-2xl lg:text-3xl font-extrabold text-white select-none logo-gradient-text">
+        <Link to="/" className="tracking-wide drop-shadow-lg text-2xl lg:text-3xl font-extrabold text-white select-none logo-gradient-text">
           JamiaHub
-        </span>
+        </Link>
         
         <ul
           className={`md:flex md:space-x-8 text-lg font-semibold absolute md:static top-16 left-0 w-full md:w-auto bg-black/95 md:bg-transparent shadow-xl md:shadow-none rounded-b-xl md:rounded-none transition-all duration-500 ease-in-out backdrop-blur-xl ${
@@ -63,13 +63,14 @@ const NavBar = () => {
           }}
         >
           <li>
-            <a
-              href="/"
+            <Link
+              to="/"
               className={`group relative transition duration-300 animate-fade-in block py-3 px-4 md:py-0 md:px-0 ${
                 isActive('/') 
                   ? 'text-purple-400 font-bold' 
                   : 'text-white hover:text-purple-400'
               }`}
+              onClick={() => setMenuOpen(false)}
             >
               Home
               <span className={`absolute left-0 md:left-auto md:right-0 -bottom-1 h-0.5 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full transition-all duration-300 ${
@@ -77,16 +78,17 @@ const NavBar = () => {
                   ? 'w-full' 
                   : 'w-0 group-hover:w-full'
               }`}></span>
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="/community"
+            <Link
+              to="/community"
               className={`group relative transition duration-300 animate-fade-in block py-3 px-4 md:py-0 md:px-0 ${
                 isActive('/community') 
                   ? 'text-purple-400 font-bold' 
                   : 'text-white hover:text-purple-400'
               }`}
+              onClick={() => setMenuOpen(false)}
             >
               Community
               <span className={`absolute left-0 md:left-auto md:right-0 -bottom-1 h-0.5 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full transition-all duration-300 ${
@@ -94,16 +96,17 @@ const NavBar = () => {
                   ? 'w-full' 
                   : 'w-0 group-hover:w-full'
               }`}></span>
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="/resources"
+            <Link
+              to="/resources"
               className={`group relative transition duration-300 animate-fade-in block py-3 px-4 md:py-0 md:px-0 ${
                 isActive('/resources') 
                   ? 'text-purple-400 font-bold' 
                   : 'text-white hover:text-purple-400'
               }`}
+              onClick={() => setMenuOpen(false)}
             >
               Resources
               <span className={`absolute left-0 md:left-auto md:right-0 -bottom-1 h-0.5 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full transition-all duration-300 ${
@@ -111,16 +114,17 @@ const NavBar = () => {
                   ? 'w-full' 
                   : 'w-0 group-hover:w-full'
               }`}></span>
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="/cgpa"
+            <Link
+              to="/cgpa"
               className={`group relative transition duration-300 animate-fade-in block py-3 px-4 md:py-0 md:px-0 ${
                 isActive('/cgpa') 
                   ? 'text-purple-400 font-bold' 
                   : 'text-white hover:text-purple-400'
               }`}
+              onClick={() => setMenuOpen(false)}
             >
               CGPA Calculator
               <span className={`absolute left-0 md:left-auto md:right-0 -bottom-1 h-0.5 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full transition-all duration-300 ${
@@ -128,16 +132,17 @@ const NavBar = () => {
                   ? 'w-full' 
                   : 'w-0 group-hover:w-full'
               }`}></span>
-            </a>
+            </Link>
           </li>
           <li>
-            <a
-              href="/about"
+            <Link
+              to="/about"
               className={`group relative transition duration-300 animate-fade-in block py-3 px-4 md:py-0 md:px-0 ${
                 isActive('/about') 
                   ? 'text-purple-400 font-bold' 
                   : 'text-white hover:text-purple-400'
               }`}
+              onClick={() => setMenuOpen(false)}
             >
               About Us
               <span className={`absolute left-0 md:left-auto md:right-0 -bottom-1 h-0.5 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full transition-all duration-300 ${
@@ -145,13 +150,16 @@ const NavBar = () => {
                   ? 'w-full' 
                   : 'w-0 group-hover:w-full'
               }`}></span>
-            </a>
+            </Link>
           </li>
           
           {shouldShowAuthButton && (
             <li className="md:hidden px-4 py-3">
               <button
-                onClick={handleAuthAction}
+                onClick={() => {
+                  handleAuthAction();
+                  setMenuOpen(false);
+                }}
                 disabled={isLoading}
                 className="w-full relative px-6 py-2.5 text-white font-semibold rounded-lg overflow-hidden group disabled:opacity-50 disabled:cursor-not-allowed"
               >

@@ -3,7 +3,7 @@ import SudokuBoard from "../components/SudokuBoard";
 import ChessGame from "../components/Chess";
 import CodingGame from "../components/CodingGame";
 import { useState, useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const difficulties = [
   { label: "Easy", value: "easy" },
@@ -142,12 +142,12 @@ const Game = () => {
                   >
                     Restart
                   </button>
-                  <a
-                    href="/"
+                  <Link
+                    to="/"
                     className="px-4 py-2 bg-gradient-to-r from-purple-700 to-blue-700 text-white rounded-lg font-semibold shadow hover:scale-105 transition text-center"
                   >
                     Go to Home
-                  </a>
+                  </Link>
                 </div>
               )}
             </div>

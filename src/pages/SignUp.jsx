@@ -4,7 +4,7 @@ import NavBar from './NavBar'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { axiosInstance } from '../lib/axios'
 import toast from "react-hot-toast"
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -185,9 +185,9 @@ const SignUp = () => {
 
             <p className="text-center text-sm mt-6 text-base-content/60">
               Already have an account?{' '}
-              <a href="/login" className="text-primary font-semibold hover:underline">
+              <Link to="/login" className="text-primary font-semibold hover:underline">
                 Log in
-              </a>
+              </Link>
             </p>
           </div>
         </div>

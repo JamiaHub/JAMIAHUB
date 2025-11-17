@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
+import { BrowserRouter, Navigate, Route, Routes, Link } from "react-router-dom"
 import Home from "./pages/Home"
 import About from "./pages/About"
 import Community from "./pages/Community"
@@ -48,10 +48,10 @@ export default function App() {
             <div>
               <h4 className="text-xl font-semibold text-white mb-4">Quick Links</h4>
               <ul className="space-y-2 text-sm">
-                <li><a href="/" className="hover:text-purple-400 transition">Home</a></li>
-                <li><a href="/resources" className="hover:text-purple-400 transition">Resources</a></li>
-                <li><a href="/community" className="hover:text-purple-400 transition">Community</a></li>
-                <li><a href="/about" className="hover:text-purple-400 transition">About</a></li>
+                <li><Link to="/" className="hover:text-purple-400 transition">Home</Link></li>
+                <li><Link to="/resources" className="hover:text-purple-400 transition">Resources</Link></li>
+                <li><Link to="/community" className="hover:text-purple-400 transition">Community</Link></li>
+                <li><Link to="/about" className="hover:text-purple-400 transition">About</Link></li>
               </ul>
             </div>
 
