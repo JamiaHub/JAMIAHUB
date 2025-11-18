@@ -10,6 +10,7 @@ import Game from "./pages/Game"
 import toast, { Toaster } from "react-hot-toast"
 import useAuthUser from "./hook/useAuthUser"
 import PageLoader from "./components/PageLoader"
+import ScrollToTop from "./components/ScrollToTop"
 
 export default function App() {
   const { isLoading } = useAuthUser;
@@ -18,6 +19,7 @@ export default function App() {
   
   return (
     <HashRouter >
+      <ScrollToTop/>
       <div className="h-screen" data-theme="forest">
         <Routes>
           <Route path="/" element={<Home />} />
