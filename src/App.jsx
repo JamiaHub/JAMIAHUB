@@ -17,7 +17,7 @@ export default function App() {
   if (isLoading) return <PageLoader />
   
   return (
-    <HashRouter basename="/JAMIAHUB">
+    <HashRouter >
       <div className="h-screen" data-theme="forest">
         <Routes>
           <Route path="/" element={<Home />} />
