@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes, Link } from "react-router-dom"
+import { HashRouter, Navigate, Route, Routes, Link } from "react-router-dom"
 import Home from "./pages/Home"
 import About from "./pages/About"
 import Community from "./pages/Community"
@@ -17,7 +17,7 @@ export default function App() {
   if (isLoading) return <PageLoader />
   
   return (
-    <BrowserRouter basename="/JAMIAHUB">
+    <HashRouter basename="/JAMIAHUB">
       <div className="h-screen" data-theme="forest">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -79,6 +79,6 @@ export default function App() {
           </div>
         </footer>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
