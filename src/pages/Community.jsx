@@ -646,10 +646,12 @@ const Community = () => {
     if (response.status === 200 || response.status === 201) {
       toast.success("blog added succesfully")
       // Refetch blogs
+      const blogsResponse = await axiosInstance.get('/admin/blogs');
       const sortedBlogs = blogsResponse.data.sort((a, b) => {
         return (b.likes || 0) - (a.likes || 0);
       });
       setBlogs(sortedBlogs);
+      setIsBlogOpen(false);
     }
   };
 
