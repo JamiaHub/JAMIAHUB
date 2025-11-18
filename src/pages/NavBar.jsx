@@ -26,17 +26,30 @@ const NavBar = () => {
   const navigate = useNavigate();
   
   const { mutate: logoutMutate } = useMutation({
-    mutationFn: async() => {
-      const response = await axiosInstance.post("/auth/logout");
-      return response.data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ["authUser"]})
-      toast.success("You are Successfully logged out");
-      navigate("/")
-    }
-  })
-  
+  mutationFn: async() => {
+    // Call backend logout endpoint first
+    const response = await axiosInstance.post("/auth/logout");
+    return response.data;
+  },
+  onSuccess: () => {
+    // Remove token from localStorage after successful backend call
+    localStorage.removeItem('jwt');
+    
+    // Invalidate auth queries to reset auth state
+    queryClient.invalidateQueries({queryKey: ["authUser"]});
+    
+    toast.success("You are successfully logged out");
+    navigate("/login"); // Redirect to login page instead of home
+  },
+  onError: (error) => {
+    // Even if backend call fails, still logout on frontend
+    console.error('Logout error:', error);
+    localStorage.removeItem('jwt');
+    queryClient.invalidateQueries({queryKey: ["authUser"]});
+    toast.success("Logged out");
+    navigate("/login");
+  }
+});
   const handleAuthAction = () => {
     if (isAuthenticated) {
       logoutMutate()

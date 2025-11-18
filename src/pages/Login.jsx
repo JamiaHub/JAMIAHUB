@@ -19,7 +19,11 @@ const login = () => {
       const response = await axiosInstance.post("/auth/login", loginData);
       return response.data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if (data.token) {
+        localStorage.setItem('jwt', data.token);
+        console.log('Token saved to localStorage');
+      }
       queryClient.invalidateQueries({queryKey: ["authUser"]})
       toast.success("Logged In");
       navigate("/")
