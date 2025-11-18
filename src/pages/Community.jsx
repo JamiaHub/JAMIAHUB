@@ -1039,6 +1039,10 @@ const Community = () => {
                             {event.location}
                           </div>
                           <div className="flex items-center text-gray-400 text-sm">
+                            <User className="w-4 h-4 mr-2" />
+                            Organized by {event.organizer}
+                          </div>
+                          <div className="flex items-center text-gray-400 text-sm">
                             <Users className="w-4 h-4 mr-2" />
                             {event.attendees} attending
                           </div>
