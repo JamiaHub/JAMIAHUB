@@ -2,12 +2,13 @@ import React, {useState} from 'react'
 import NavBar from "./NavBar";
 import { axiosInstance } from '../lib/axios';
 import toast from 'react-hot-toast';
+import profilePic from '../assets/profilePic.jpeg'
 
 
 const about = () => {
   const teamMember = {
     name: "Mahtab Madni",
-    image: "/profilePic.jpeg",
+    image: profilePic,
     description: "Hi, I'm Mahtab Madni — a passionate Web Developer and Artificial Intelligence Enthusiast dedicated to crafting innovative solutions that make a meaningful impact. Driven by curiosity and a love for learning, I continuously explore emerging technologies and creative approaches to problem-solving. I believe in the power of collaboration and knowledge-sharing to help communities grow, thrive, and succeed together.",
     branch: "ECE (2028)",
     linkedin: "https://www.linkedin.com/in/mahtab-madni-391364327",
