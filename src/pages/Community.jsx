@@ -979,14 +979,14 @@ const Community = () => {
 
                   return (
                     <div
-                      key={event.id}
+                      key={event._id || event.id}
                       className="bg-gray-800/40 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700 hover:border-purple-500 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/20 cursor-pointer transform hover:-translate-y-2"
                       onClick={() => setSelectedEvent(event)}
                       style={{ animationDelay: `${index * 0.1}s` }}
                     >
                       <div className="relative h-48 overflow-hidden">
                         <img
-                          src={`${BASE_URL}${event.image}`}
+                          src={event.image}
                           alt={event.title}
                           className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
                         />
