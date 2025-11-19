@@ -85,15 +85,10 @@ const SPICPICalculator = () => {
   // CPI Calculator Functions
   const addSemester = () => {
     const lastSem = semesters[semesters.length - 1];
-    let newYear = lastSem.year;
     let newSemester = lastSem.semester + 1;
+    let newYear = Math.floor((newSemester - 1) / 2) + 1;
     
-    if (newSemester > 2) {
-      newYear++;
-      newSemester = 1;
-    }
-    
-    if (newYear <= 4) {
+    if (newYear <= 4 && newSemester <= 8) {
       setSemesters([...semesters, { year: newYear, semester: newSemester, spi: '', credits: '' }]);
     }
   };
@@ -418,7 +413,7 @@ const SPICPICalculator = () => {
                     <div className="flex items-center gap-4">
                       <div className="flex-shrink-0">
                         <span className="text-purple-400 font-bold text-lg">
-                          Year {semester.year} - Sem {semester.semester === 1 ? 'I' : 'II'}
+                          Year {semester.year} - Sem {semester.semester}
                         </span>
                         <div className="text-xs text-gray-500">
                           Weight: {semester.year === 1 ? '25%' : semester.year === 2 ? '50%' : semester.year === 3 ? '75%' : '100%'}
