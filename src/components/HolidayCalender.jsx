@@ -152,7 +152,7 @@ const HolidayCalendar = ({ isOpen, onClose }) => {
           </div>
           
           <p className="mt-4 text-xs text-gray-400 text-center">
-            Holidays marked according to Jamia Annual Calender
+            Holidays are marked according to the Jamia Annual Calendar.
           </p>
         </div>
       </div>
