@@ -425,7 +425,27 @@ const Resources = () => {
                 Back
               </button>
             </div>
-            {subjects.filter(subject => subject.type === selectedSubjectType).length > 0 ? (
+            
+            {loading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[...Array(6)].map((_, index) => (
+                  <div 
+                    key={index} 
+                    className="group relative bg-gradient-to-br from-purple-600/20 to-blue-600/20 backdrop-blur-xl rounded-2xl p-6 border border-white/20 animate-pulse"
+                  >
+                    <div className="relative z-10">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="w-12 h-12 rounded-full bg-white/10"></div>
+                        <div className="w-8 h-8 rounded-full bg-white/10"></div>
+                      </div>
+                      <div className="h-6 bg-white/10 rounded w-3/4 mb-2"></div>
+                      <div className="h-4 bg-white/10 rounded w-1/2 mb-1"></div>
+                      <div className="h-4 bg-white/10 rounded w-1/3"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : subjects.filter(subject => subject.type === selectedSubjectType).length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" >
                 {subjects.filter(subject => subject.type === selectedSubjectType).map((subject, index) => (
                   <div key={index} className="group relative bg-gradient-to-br from-purple-600/20 to-blue-600/20 backdrop-blur-xl rounded-2xl p-6 border border-white/20 hover:border-purple-400 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/50 cursor-pointer animate-resources-card" style={{ animationDelay: `${index * 0.1}s` }} onClick={() => {
@@ -641,11 +661,24 @@ const Resources = () => {
             </div>
 
             {loading ? (
-              <div className="text-center py-12">
-                <div className="inline-block p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto"></div>
-                  <p className="text-white text-lg mt-4">Loading resources...</p>
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[...Array(6)].map((_, index) => (
+                  <div 
+                    key={index} 
+                    className="group relative bg-gradient-to-br from-indigo-600/20 to-purple-600/20 backdrop-blur-xl rounded-2xl p-6 border border-white/20 animate-pulse"
+                  >
+                    <div className="relative z-10">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="w-12 h-12 rounded-full bg-white/10"></div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-10 h-10 rounded-full bg-white/10"></div>
+                        </div>
+                      </div>
+                      <div className="h-6 bg-white/10 rounded w-3/4 mb-2"></div>
+                      <div className="h-4 bg-white/10 rounded w-1/2"></div>
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : resources.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -672,19 +705,16 @@ const Resources = () => {
                             </svg>
                           </a>
                           
-                          {/* Delete Button - Only show if user uploaded this resource */}
                           {authUser && resource.uploadedBy && authUser._id === resource.uploadedBy && (
-                            <>
-                              <button
-                                onClick={() => handleDeleteResource(resource._id || resource.id)}
-                                className="w-10 h-10 rounded-full bg-red-500/20 hover:bg-red-500/40 flex items-center justify-center transition-all duration-300 group/delete"
-                                title="Delete resource"
-                              >
-                                <svg className="w-5 h-5 text-red-400 group-hover/delete:text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                              </button>
-                            </>
+                            <button
+                              onClick={() => handleDeleteResource(resource._id || resource.id)}
+                              className="w-10 h-10 rounded-full bg-red-500/20 hover:bg-red-500/40 flex items-center justify-center transition-all duration-300 group/delete"
+                              title="Delete resource"
+                            >
+                              <svg className="w-5 h-5 text-red-400 group-hover/delete:text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              </svg>
+                            </button>
                           )}
                         </div>
                       </div>
@@ -694,12 +724,12 @@ const Resources = () => {
                       {resource.subjectCode && (
                         <p className="text-white/60 text-sm mb-3">{resource.subjectCode}</p>
                       )}
-                      
                     </div>
                     <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-b-2xl transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
                   </div>
                 ))}
-              </div> ):(
+              </div>
+            ) : (
               <div className="text-center py-12">
                 <div className="inline-block p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20">
                   <svg className="w-16 h-16 text-white/40 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -712,6 +742,7 @@ const Resources = () => {
             )}
           </div>
         )}
+
         {/* Floating Action Button to Add Resources */}
         {isSubmitted &&  (
           <button
@@ -1256,6 +1287,25 @@ const Resources = () => {
             opacity: 0.7;
           }
         }
+        @keyframes resources-pulse {
+          0%, 100% { opacity: 0.6; }
+          50% { opacity: 0.8; }
+        }
+
+        @keyframes resources-card {
+          from { opacity: 0; transform: translateY(20px) scale(0.95); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes resources-modal-bg {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        @keyframes resources-modal {
+          from { opacity: 0; transform: scale(0.9) translateY(-20px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
+        }
         
         @keyframes ray-3 {
           0%, 100% { 
@@ -1343,6 +1393,10 @@ const Resources = () => {
           background-size: 200% 200%;
           animation: gradient 4s ease infinite;
         }
+        .animate-resources-pulse { animation: resources-pulse 2s ease-in-out infinite; }
+        .animate-resources-card { animation: resources-card 0.6s ease-out forwards; }
+        .animate-resources-modal-bg { animation: resources-modal-bg 0.3s ease-out forwards; }
+        .animate-resources-modal { animation: resources-modal 0.4s ease-out forwards; }
         .animate-float-3d { animation: float-3d 6s ease-in-out infinite; }
         .animate-card-appear { animation: card-appear 0.6s ease-out forwards; }
         .animate-scale-in { animation: scale-in 0.3s ease-out forwards; }
