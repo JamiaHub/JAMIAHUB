@@ -613,28 +613,28 @@ const Community = () => {
   ];
 
   const isEventOwner = (event) => {
-  if (!authUser?._id || !event.uploadedBy) return false;
-  
-  const userId = authUser._id;
-  const uploadedBy = event.uploadedBy;
-  
-  // Handle string format
-  if (typeof uploadedBy === 'string') {
-    return uploadedBy === userId;
-  }
-  
-  // Handle object with _id
-  if (uploadedBy._id) {
-    return uploadedBy._id === userId;
-  }
-  
-  // Handle MongoDB $oid format
-  if (uploadedBy.$oid) {
-    return uploadedBy.$oid === userId;
-  }
-  
-  return false;
-};
+    if (!authUser?._id || !event.uploadedBy) return false;
+    
+    const userId = authUser._id;
+    const uploadedBy = event.uploadedBy;
+    
+    // Handle string format
+    if (typeof uploadedBy === 'string') {
+      return uploadedBy === userId;
+    }
+    
+    // Handle object with _id
+    if (uploadedBy._id) {
+      return uploadedBy._id === userId;
+    }
+    
+    // Handle MongoDB $oid format
+    if (uploadedBy.$oid) {
+      return uploadedBy.$oid === userId;
+    }
+    
+    return false;
+  };
 
   const handleBlogSubmit = async (formData) => {
     const response = await axiosInstance.post('/admin/add-Blog', formData, {
@@ -957,158 +957,201 @@ const Community = () => {
         {/* Events Section */}
         {activeTab === 'events' && (
           <>
-            {events.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-64 bg-gray-800/40 backdrop-blur-sm rounded-2xl border border-gray-700 border-dashed">
-                <Calendar className="w-16 h-16 text-gray-600 mb-4" />
-                <h3 className="text-xl font-bold text-white mb-2">No Events Yet</h3>
-                <p className="text-gray-400 mb-6">Be the first to create an event!</p>
-                <button
-                  onClick={() => isAuthenticated ? setIsAddEventOpen(true) : setAddbtnClick(true)}
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 flex items-center gap-2"
-                >
-                  <Plus className="w-5 h-5" />
-                  Add Event
-                </button>
-              </div>
-            ) : (
+            { loading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {events.map((event, index) => {
-                  // Check if event is upcoming or past
-                  const eventDate = new Date(event.date);
-                  const today = new Date();
-                  today.setHours(0, 0, 0, 0);
-                  const isUpcoming = eventDate >= today;
-
-                  return (
-                    <div
-                      key={event._id || event.id}
-                      className="bg-gray-800/40 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700 hover:border-purple-500 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/20 cursor-pointer transform hover:-translate-y-2"
-                      onClick={() => setSelectedEvent(event)}
-                      style={{ animationDelay: `${index * 0.1}s` }}
-                    >
-                      <div className="relative h-48 overflow-hidden">
-                        <img
-                          src={event.image}
-                          alt={event.title}
-                          className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
-                        />
-                        
-                        {/* Event Status Badge - Upcoming or Past */}
-                        <div className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs  uppercase tracking-wide shadow-lg ${
-                          isUpcoming 
-                            ? 'bg-green-500 text-white' 
-                            : 'bg-gray-500 text-white'
-                        }`}>
-                          {isUpcoming ? 'Upcoming' : 'Past'}
-                        </div>
-                        
-                        {/* Category Badge */}
-                        <div className="absolute top-4 right-4 bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                          {event.category}
-                        </div>
-                        
-                        {/* Delete Button - Only show to uploader */}
-                        {isEventOwner(event) && (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDeleteEvent(event._id || event.id);
-                            }}
-                            className="absolute bottom-4 left-4 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full transition-all duration-300 shadow-lg hover:shadow-red-500/50 group"
-                            title="Delete Event"
-                          >
-                            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                          </button>
-                        )}
-                      </div>
-                      <div className="p-6">
-                        <h3 className="text-xl font-bold text-white mb-3">{event.title}</h3>
-                        <div className="space-y-2 mb-4">
-                          <div className="flex items-center text-gray-400 text-sm">
-                            <Calendar className="w-4 h-4 mr-2" />
-                            {new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                          </div>
-                          <div className="flex items-center text-gray-400 text-sm">
-                            <Clock className="w-4 h-4 mr-2" />
-                            {event.time}
-                          </div>
-                          <div className="flex items-center text-gray-400 text-sm">
-                            <MapPin className="w-4 h-4 mr-2" />
-                            {event.location}
-                          </div>
-                          <div className="flex items-center text-gray-400 text-sm">
-                            <User className="w-4 h-4 mr-2" />
-                            Organized by {event.organizer}
-                          </div>
-                          <div className="flex items-center text-gray-400 text-sm">
-                            <Users className="w-4 h-4 mr-2" />
-                            {event.attendees} attending
-                          </div>
-                        </div>
-                        <p className="text-gray-400 text-sm line-clamp-2 mb-4">{event.description}</p>
-                      </div>
+                {[...Array(6)].map((_, index) => (
+                  <div
+                    key={index}
+                    className="bg-gray-800/40 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700 animate-pulse"
+                  >
+                    <div className="h-48 bg-gray-700/50"></div>
+                    <div className="p-6 space-y-3">
+                      <div className="h-6 bg-gray-700/50 rounded w-3/4"></div>
+                      <div className="h-4 bg-gray-700/50 rounded w-1/2"></div>
+                      <div className="h-4 bg-gray-700/50 rounded w-2/3"></div>
+                      <div className="h-4 bg-gray-700/50 rounded w-full"></div>
+                      <div className="h-16 bg-gray-700/50 rounded"></div>
                     </div>
-                  );
-                })}
+                  </div>
+                ))}
               </div>
-            )}
+            ) : events.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center h-64 bg-gray-800/40 backdrop-blur-sm rounded-2xl border border-gray-700 border-dashed">
+                    <Calendar className="w-16 h-16 text-gray-600 mb-4" />
+                    <h3 className="text-xl font-bold text-white mb-2">No Events Yet</h3>
+                    <p className="text-gray-400 mb-6">Be the first to create an event!</p>
+                    <button
+                      onClick={() => isAuthenticated ? setIsAddEventOpen(true) : setAddbtnClick(true)}
+                      className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 flex items-center gap-2"
+                    >
+                      <Plus className="w-5 h-5" />
+                      Add Event
+                    </button>
+                  </div>
+                ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {events.map((event, index) => {
+                    // Check if event is upcoming or past
+                    const eventDate = new Date(event.date);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    const isUpcoming = eventDate >= today;
+
+                    return (
+                      <div
+                        key={event._id || event.id}
+                        className="bg-gray-800/40 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700 hover:border-purple-500 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/20 cursor-pointer transform hover:-translate-y-2"
+                        onClick={() => setSelectedEvent(event)}
+                        style={{ animationDelay: `${index * 0.1}s` }}
+                      >
+                        <div className="relative h-48 overflow-hidden">
+                          <img
+                            src={event.image}
+                            alt={event.title}
+                            className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
+                          />
+                          
+                          {/* Event Status Badge - Upcoming or Past */}
+                          <div className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs  uppercase tracking-wide shadow-lg ${
+                            isUpcoming 
+                              ? 'bg-green-500 text-white' 
+                              : 'bg-gray-500 text-white'
+                          }`}>
+                            {isUpcoming ? 'Upcoming' : 'Past'}
+                          </div>
+                          
+                          {/* Category Badge */}
+                          <div className="absolute top-4 right-4 bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            {event.category}
+                          </div>
+                          
+                          {/* Delete Button - Only show to uploader */}
+                          {isEventOwner(event) && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteEvent(event._id || event.id);
+                              }}
+                              className="absolute bottom-4 left-4 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full transition-all duration-300 shadow-lg hover:shadow-red-500/50 group"
+                              title="Delete Event"
+                            >
+                              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              </svg>
+                            </button>
+                          )}
+                        </div>
+                        <div className="p-6">
+                          <h3 className="text-xl font-bold text-white mb-3">{event.title}</h3>
+                          <div className="space-y-2 mb-4">
+                            <div className="flex items-center text-gray-400 text-sm">
+                              <Calendar className="w-4 h-4 mr-2" />
+                              {new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </div>
+                            <div className="flex items-center text-gray-400 text-sm">
+                              <Clock className="w-4 h-4 mr-2" />
+                              {event.time}
+                            </div>
+                            <div className="flex items-center text-gray-400 text-sm">
+                              <MapPin className="w-4 h-4 mr-2" />
+                              {event.location}
+                            </div>
+                            <div className="flex items-center text-gray-400 text-sm">
+                              <User className="w-4 h-4 mr-2" />
+                              Organized by {event.organizer}
+                            </div>
+                            <div className="flex items-center text-gray-400 text-sm">
+                              <Users className="w-4 h-4 mr-2" />
+                              {event.attendees} attending
+                            </div>
+                          </div>
+                          <p className="text-gray-400 text-sm line-clamp-2 mb-4">{event.description}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
           </>
         )}
 
         {/* Blogs Section */}
         {activeTab === 'blogs' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {blogs.map((blog, index) => (
-              <div
-                key={blog.id}
-                className="bg-gray-800/40 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/20 cursor-pointer transform hover:-translate-y-2"
-                onClick={() => setSelectedBlog(blog)}
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="relative h-48 overflow-hidden">
-                  <img
-                    src={blog.image}
-                    alt={blog.title}
-                    className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute top-4 left-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
-                    {getCategoryIcon(blog.category)}
-                    {blog.category}
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-white mb-2 line-clamp-2">{blog.title}</h3>
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="text-gray-400 text-sm">{blog.author}</span>
-                    <span className="text-gray-600">•</span>
-                    <span className="text-gray-400 text-sm">{blog.readTime}</span>
-                  </div>
-                  <p className="text-gray-400 text-sm line-clamp-3 mb-4">{blog.excerpt}</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    { JSON.parse(blog.tags[0]).map((tag, i) => (
-                      <span key={i} className="bg-gray-700/50 text-gray-300 px-3 py-1 rounded-full text-xs">
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="flex items-center justify-between text-gray-400 text-sm">
-                    <button 
-                      onClick={(e) => handleBlogLikeClicked(blog._id || blog.id, e)}
-                      className={`flex items-center gap-1 transition-colors ${
-                        likedBlogs.has(blog._id || blog.id) 
-                          ? 'text-red-500' 
-                          : 'hover:text-red-500'
-                      }`}
+          <> {loading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {[...Array(6)].map((_, index) => (
+                    <div
+                      key={index}
+                      className="bg-gray-800/40 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700 animate-pulse"
                     >
-                      {likedBlogs.has(blog._id || blog.id) ? '❤️' : '🤍'} {blog.likes}
-                    </button>
-                  </div>
+                      <div className="h-48 bg-gray-700/50"></div>
+                      <div className="p-6 space-y-3">
+                        <div className="h-6 bg-gray-700/50 rounded w-3/4"></div>
+                        <div className="h-4 bg-gray-700/50 rounded w-1/2"></div>
+                        <div className="h-16 bg-gray-700/50 rounded"></div>
+                        <div className="flex gap-2">
+                          <div className="h-6 bg-gray-700/50 rounded w-16"></div>
+                          <div className="h-6 bg-gray-700/50 rounded w-20"></div>
+                          <div className="h-6 bg-gray-700/50 rounded w-16"></div>
+                        </div>
+                        <div className="h-4 bg-gray-700/50 rounded w-1/3"></div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
+              ):(
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {blogs.map((blog, index) => (
+                  <div
+                    key={blog.id}
+                    className="bg-gray-800/40 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/20 cursor-pointer transform hover:-translate-y-2"
+                    onClick={() => setSelectedBlog(blog)}
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <div className="relative h-48 overflow-hidden">
+                      <img
+                        src={blog.image}
+                        alt={blog.title}
+                        className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute top-4 left-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+                        {getCategoryIcon(blog.category)}
+                        {blog.category}
+                      </div>
+                    </div>
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-white mb-2 line-clamp-2">{blog.title}</h3>
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="text-gray-400 text-sm">{blog.author}</span>
+                        <span className="text-gray-600">•</span>
+                        <span className="text-gray-400 text-sm">{blog.readTime}</span>
+                      </div>
+                      <p className="text-gray-400 text-sm line-clamp-3 mb-4">{blog.excerpt}</p>
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        { JSON.parse(blog.tags[0]).map((tag, i) => (
+                          <span key={i} className="bg-gray-700/50 text-gray-300 px-3 py-1 rounded-full text-xs">
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="flex items-center justify-between text-gray-400 text-sm">
+                        <button 
+                          onClick={(e) => handleBlogLikeClicked(blog._id || blog.id, e)}
+                          className={`flex items-center gap-1 transition-colors ${
+                            likedBlogs.has(blog._id || blog.id) 
+                              ? 'text-red-500' 
+                              : 'hover:text-red-500'
+                          }`}
+                        >
+                          {likedBlogs.has(blog._id || blog.id) ? '❤️' : '🤍'} {blog.likes}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </div>
 
