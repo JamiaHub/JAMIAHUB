@@ -176,6 +176,7 @@ const Resources = () => {
 
   useEffect(() => {
     async function fetchSubjects() {
+      setLoading(true);
       try {
         const data = await queryClient.fetchQuery({
           queryKey: ['subjects', branch, sem],
@@ -199,6 +200,7 @@ const Resources = () => {
 
   useEffect(() => {
     async function fetchResources() {
+      setLoading(true);
       try {
         const data = await queryClient.fetchQuery({
           queryKey: ['resources', branch, sem, sub],
