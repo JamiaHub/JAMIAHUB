@@ -491,7 +491,7 @@ const Community = () => {
       link: "https://www.instagram.com/gdg__jmi/"
     },
     { 
-      name: "Web3 JMI", 
+      name: "W3B JMI", 
       logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxUEKbbaymIeN6mf8kYlKZedKBnqjaicuQQA&s",
       color: "from-green-500/20 to-emerald-500/20", 
       border: "border-green-400/30", 
