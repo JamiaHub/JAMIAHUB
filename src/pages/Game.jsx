@@ -4,6 +4,8 @@ import ChessGame from "../components/Chess";
 import CodingGame from "../components/CodingGame";
 import { useState, useEffect, useRef } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import MemoryGame from "../components/Memory";
+import TicTacToe from "../components/TicTactoe";
 
 const difficulties = [
   { label: "Easy", value: "easy" },
