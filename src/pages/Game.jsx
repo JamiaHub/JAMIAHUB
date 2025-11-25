@@ -166,6 +166,14 @@ const Game = () => {
           <CodingGame />
         </div>
       )}
+      {/* Tic-Tac-Toe */}
+      {game === "Tic-Tac-Toe" && (
+        <div>
+          <TicTacToe />
+        </div>
+      )}
+      {/* Memory Game*/}
+      {game === "Memory" && <MemoryGame />}
       <style>{`
         @keyframes community-sphere1 { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(30px) scale(1.1); } }
         @keyframes community-sphere2 { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-40px) scale(1.15); } }
