@@ -206,7 +206,7 @@ export default function BlogPostForm({ isOpen, onClose, onSubmit }) {
                 name="title"
                 value={newBlog.title}
                 onChange={handleBlogInputChange}
-                placeholder="✨ Give your blog an amazing title..."
+                placeholder=" Give your blog an amazing title..."
                 className="w-full bg-transparent text-white text-2xl font-bold focus:outline-none placeholder:text-gray-600 leading-tight"
               />
             </div>
@@ -217,7 +217,7 @@ export default function BlogPostForm({ isOpen, onClose, onSubmit }) {
                 name="excerpt"
                 value={newBlog.excerpt}
                 onChange={handleBlogInputChange}
-                placeholder="🎯 Hook your readers with a compelling summary..."
+                placeholder=" Hook your readers with a compelling summary..."
                 rows="2"
                 maxLength="200"
                 className="w-full bg-transparent text-gray-300 focus:outline-none resize-none placeholder:text-gray-500 text-sm leading-relaxed"
@@ -233,7 +233,7 @@ export default function BlogPostForm({ isOpen, onClose, onSubmit }) {
                 name="content"
                 value={newBlog.content}
                 onChange={handleBlogInputChange}
-                placeholder="📝 Write your blog content... Share your insights, tips, and experiences with the community!"
+                placeholder=" Write your blog content... Share your insights, tips, and experiences with the community!"
                 rows="8"
                 className="w-full bg-transparent text-white text-lg focus:outline-none resize-none placeholder:text-gray-600 leading-relaxed"
               />

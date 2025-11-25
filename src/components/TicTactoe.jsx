@@ -218,10 +218,10 @@ const TicTacToe = () => {
             ) : (
               <p className="text-2xl font-bold text-white">
                 {winner === "draw"
-                  ? "It's a Draw! 🤝"
+                  ? "It's a Draw! "
                   : winner === "X"
-                  ? "You Win! 🎉"
-                  : "Computer Wins! 🤖"}
+                  ? "You Win! "
+                  : "Computer Wins! "}
               </p>
             )}
           </div>
