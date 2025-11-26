@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react'
-import NavBar from './NavBar'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { axiosInstance } from '../lib/axios'
-import toast from "react-hot-toast"
-import { Link, useNavigate } from 'react-router'
+import React, { useState } from "react";
+import NavBar from "./NavBar";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { axiosInstance } from "../lib/axios";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router";
+import { Eye, EyeOff, CheckCircle } from "lucide-react";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -14,25 +14,98 @@ const SignUp = () => {
     password: "",
     branch: "",
     sem: "",
-  })
+  });
+  const [otp, setOtp] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
 
-  const queryClient = useQueryClient()
-  const {mutate, isPending, error} = useMutation({
-    mutationFn: async() => {
-      const response = await axiosInstance.post("/auth/signup", signUpData);
+  const queryClient = useQueryClient();
+
+  // Send OTP mutation
+  const { mutate: sendOtpMutation, isPending: isSendingOtp } = useMutation({
+    mutationFn: async () => {
+      const response = await axiosInstance.post("/auth/send-otp", {
+        email: signUpData.email,
+      });
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ["authUser"]})
-      toast.success("Account Created Succesfully");
-      navigate("/login");
-    }
-  })
+      setOtpSent(true);
+      toast.success("OTP sent to your email!");
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Failed to send OTP");
+    },
+  });
 
-  const handleSubmit = async(e) => {
+  // Verify OTP mutation
+  const { mutate: verifyOtpMutation, isPending: isVerifyingOtp } = useMutation({
+    mutationFn: async () => {
+      const response = await axiosInstance.post("/auth/verify-otp", {
+        email: signUpData.email,
+        otp,
+      });
+      return response.data;
+    },
+    onSuccess: () => {
+      setIsEmailVerified(true);
+      toast.success("Email verified successfully!");
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Invalid OTP");
+    },
+  });
+
+  // Signup mutation
+  const {
+    mutate: signupMutation,
+    isPending,
+    error,
+  } = useMutation({
+    mutationFn: async () => {
+      const response = await axiosInstance.post("/auth/signup", {
+        ...signUpData,
+        isEmailVerified,
+      });
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      toast.success("Account Created Successfully");
+      navigate("/login");
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Signup failed");
+    },
+  });
+
+  const handleSendOtp = () => {
+    if (!signUpData.email) {
+      toast.error("Please enter your email");
+      return;
+    }
+    sendOtpMutation();
+  };
+
+  const handleVerifyOtp = () => {
+    if (!otp) {
+      toast.error("Please enter the OTP");
+      return;
+    }
+    verifyOtpMutation();
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    mutate()
-  }
+
+    if (!isEmailVerified) {
+      toast.error("Please verify your email first");
+      return;
+    }
+
+    signupMutation();
+  };
 
   return (
     <div className="min-h-screen relative overflow-hidden" data-theme="forest">
@@ -52,11 +125,14 @@ const SignUp = () => {
 
       {/* Grid pattern overlay */}
       <div className="absolute inset-0 z-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `linear-gradient(rgba(139, 92, 246, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.3) 1px, transparent 1px)`,
-          backgroundSize: '50px 50px',
-          animation: 'grid-move 20s linear infinite'
-        }}></div>
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `linear-gradient(rgba(139, 92, 246, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.3) 1px, transparent 1px)`,
+            backgroundSize: "50px 50px",
+            animation: "grid-move 20s linear infinite",
+          }}
+        ></div>
       </div>
 
       {/* Animated stars */}
@@ -88,18 +164,32 @@ const SignUp = () => {
       <div className="relative z-10 flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
         <div className="w-full max-w-md">
           <div className="bg-transparent backdrop-blur-md rounded-2xl shadow-2xl shadow-purple-400 p-8 border border-base-300">
-            <h2 className="text-3xl font-bold text-center mb-2">Create Account</h2>
-            <p className="text-center text-base-content/60 mb-6">Join us today</p>
+            <h2 className="text-3xl font-bold text-center mb-2">
+              Create Account
+            </h2>
+            <p className="text-center text-base-content/60 mb-6">
+              Join us today
+            </p>
 
             {error && (
               <div className="alert alert-error mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="stroke-current shrink-0 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
-                <span>{error.response.data.message}</span>
+                <span>{error.response?.data?.message}</span>
               </div>
             )}
-            
+
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div className="form-control">
                 <label className="label">
@@ -110,7 +200,10 @@ const SignUp = () => {
                   placeholder="Enter your full name"
                   className="input input-bordered w-full"
                   value={signUpData.name}
-                  onChange={(e) => setSignUpData({...signUpData, name: e.target.value})}
+                  onChange={(e) =>
+                    setSignUpData({ ...signUpData, name: e.target.value })
+                  }
+                  required
                 />
               </div>
 
@@ -118,44 +211,134 @@ const SignUp = () => {
                 <label className="label">
                   <span className="label-text font-medium">Email</span>
                 </label>
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="input input-bordered w-full"
-                  value={signUpData.email}
-                  onChange={(e) => setSignUpData({...signUpData, email: e.target.value})}
-                />
+                <div className="relative">
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    className="input input-bordered w-full pr-10"
+                    value={signUpData.email}
+                    onChange={(e) =>
+                      setSignUpData({ ...signUpData, email: e.target.value })
+                    }
+                    disabled={isEmailVerified}
+                    required
+                  />
+                  {isEmailVerified && (
+                    <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 text-green-500 w-5 h-5" />
+                  )}
+                </div>
+
+                {!isEmailVerified && (
+                  <button
+                    type="button"
+                    onClick={handleSendOtp}
+                    disabled={isSendingOtp || !signUpData.email}
+                    className="btn btn-sm btn-outline btn-primary mt-2 w-full"
+                  >
+                    {isSendingOtp ? (
+                      <>
+                        <span className="loading loading-spinner loading-sm"></span>
+                        Sending...
+                      </>
+                    ) : otpSent ? (
+                      "Resend OTP"
+                    ) : (
+                      "Send OTP"
+                    )}
+                  </button>
+                )}
               </div>
+
+              {otpSent && !isEmailVerified && (
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text font-medium">Enter OTP</span>
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Enter 6-digit OTP"
+                      className="input input-bordered flex-1"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      maxLength={6}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleVerifyOtp}
+                      disabled={isVerifyingOtp}
+                      className="btn btn-success"
+                    >
+                      {isVerifyingOtp ? (
+                        <span className="loading loading-spinner loading-sm"></span>
+                      ) : (
+                        "Verify"
+                      )}
+                    </button>
+                  </div>
+                  <label className="label">
+                    <span className="label-text-alt text-base-content/60">
+                      OTP sent to your email. Valid for 10 minutes.
+                    </span>
+                  </label>
+                </div>
+              )}
 
               <div className="form-control">
                 <label className="label">
                   <span className="label-text font-medium">Password</span>
                 </label>
-                <input
-                  type="password"
-                  placeholder="Enter your password"
-                  className="input input-bordered w-full"
-                  value={signUpData.password}
-                  onChange={(e) => setSignUpData({...signUpData, password: e.target.value})}
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    className="input input-bordered w-full pr-10"
+                    value={signUpData.password}
+                    onChange={(e) =>
+                      setSignUpData({ ...signUpData, password: e.target.value })
+                    }
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-base-content/60 hover:text-base-content"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
+                <label className="label">
+                  <span className="label-text-alt text-base-content/60">
+                    Must be at least 6 characters
+                  </span>
+                </label>
               </div>
 
               <div className="form-control">
                 <label className="label">
                   <span className="label-text font-medium">Branch</span>
                 </label>
-                <select className="select select-bordered w-full"
+                <select
+                  className="select select-bordered w-full"
                   value={signUpData.branch}
-                  onChange={(e) => setSignUpData({...signUpData, branch: e.target.value})}>
-                  <option >Select your branch</option>
-                  <option value={"CSE"}>Computer Science</option>
-                  <option value={"ECE"}>Electronics & Communication</option>
-                  <option value={"CE"}>Civil Engineering</option>
-                  <option value={"ME"}>Mechanical Engineering</option>
-                  <option value={"EE"}>Electrical Engineering</option>
-                  <option value={"CS-DS"}>Computer Science - Data Science</option>
-                  <option value={"VLSI"}>Electronics & VLSI</option>
-                  <option value={"EE-CE"}>Electrical & Computer</option>
+                  onChange={(e) =>
+                    setSignUpData({ ...signUpData, branch: e.target.value })
+                  }
+                  required
+                >
+                  <option value="">Select your branch</option>
+                  <option value="CSE">Computer Science</option>
+                  <option value="ECE">Electronics & Communication</option>
+                  <option value="CE">Civil Engineering</option>
+                  <option value="ME">Mechanical Engineering</option>
+                  <option value="EE">Electrical Engineering</option>
+                  <option value="CS-DS">Computer Science - Data Science</option>
+                  <option value="VLSI">Electronics & VLSI</option>
+                  <option value="EE-CE">Electrical & Computer</option>
                 </select>
               </div>
 
@@ -163,29 +346,48 @@ const SignUp = () => {
                 <label className="label">
                   <span className="label-text font-medium">Semester</span>
                 </label>
-                <select className="select select-bordered w-full"
+                <select
+                  className="select select-bordered w-full"
                   value={signUpData.sem}
-                  onChange={(e) => setSignUpData({...signUpData, sem: e.target.value})}>
-                  <option >Select your semester</option>
-                  <option value={"1"}>1st Semester</option>
-                  <option value={"2"}>2nd Semester</option>
-                  <option value={"3"}>3rd Semester</option>
-                  <option value={"4"}>4th Semester</option>
-                  <option value={"5"}>5th Semester</option>
-                  <option value={"6"}>6th Semester</option>
-                  <option value={"7"}>7th Semester</option>
-                  <option value={"8"}>8th Semester</option>
+                  onChange={(e) =>
+                    setSignUpData({ ...signUpData, sem: e.target.value })
+                  }
+                  required
+                >
+                  <option value="">Select your semester</option>
+                  <option value="1">1st Semester</option>
+                  <option value="2">2nd Semester</option>
+                  <option value="3">3rd Semester</option>
+                  <option value="4">4th Semester</option>
+                  <option value="5">5th Semester</option>
+                  <option value="6">6th Semester</option>
+                  <option value="7">7th Semester</option>
+                  <option value="8">8th Semester</option>
                 </select>
               </div>
 
-              <button type="submit" className="btn btn-primary w-full mt-6">
-                {isPending ? "Signing up..." : "Create Account"}
+              <button
+                type="submit"
+                className="btn btn-primary w-full mt-6"
+                disabled={isPending || !isEmailVerified}
+              >
+                {isPending ? (
+                  <>
+                    <span className="loading loading-spinner loading-sm"></span>
+                    Signing up...
+                  </>
+                ) : (
+                  "Create Account"
+                )}
               </button>
             </form>
 
             <p className="text-center text-sm mt-6 text-base-content/60">
-              Already have an account?{' '}
-              <Link to="/login" className="text-primary font-semibold hover:underline">
+              Already have an account?{" "}
+              <Link
+                to="/login"
+                className="text-primary font-semibold hover:underline"
+              >
                 Log in
               </Link>
             </p>
@@ -251,58 +453,6 @@ const SignUp = () => {
           50% { opacity: 1; transform: scale(1.5); }
         }
         
-        @keyframes slide-up {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes gradient {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-        
-        @keyframes float-3d {
-          0%, 100% { transform: translateY(0) rotateZ(0deg); }
-          50% { transform: translateY(-20px) rotateZ(5deg); }
-        }
-        
-        @keyframes card-appear {
-          from { opacity: 0; transform: translateY(20px) scale(0.95); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        
-        @keyframes scale-in {
-          from { opacity: 0; transform: scale(0.9); }
-          to { opacity: 1; transform: scale(1); }
-        }
-        
-        @keyframes bounce-in {
-          0% { opacity: 0; transform: scale(0.5); }
-          50% { transform: scale(1.05); }
-          100% { opacity: 1; transform: scale(1); }
-        }
-        
-        @keyframes gradient-shift {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-        
-        @keyframes border-flow {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-        
-        @keyframes float-particle {
-          0%, 100% { 
-            transform: translate(0, 0); 
-            opacity: 0.4;
-          }
-          50% { 
-            transform: translate(10px, -15px); 
-            opacity: 0.8;
-          }
-        }
-        
         .animate-float-orb { animation: float-orb 15s ease-in-out infinite; }
         .animate-ray-1 { animation: ray-1 8s ease-in-out infinite; }
         .animate-ray-2 { animation: ray-2 10s ease-in-out infinite; }
@@ -311,33 +461,9 @@ const SignUp = () => {
         .animation-delay-3000 { animation-delay: 3s; }
         .animation-delay-4000 { animation-delay: 4s; }
         .animate-twinkle { animation: twinkle 3s ease-in-out infinite; }
-        .animate-slide-up { animation: slide-up 0.8s ease-out forwards; }
-        .animation-delay-200 { animation-delay: 0.2s; }
-        .animation-delay-300 { animation-delay: 0.3s; }
-        .animation-delay-400 { animation-delay: 0.4s; }
-        .animation-delay-500 { animation-delay: 0.5s; }
-        .animation-delay-600 { animation-delay: 0.6s; }
-        .animate-gradient { 
-          background-size: 200% 200%;
-          animation: gradient 4s ease infinite;
-        }
-        .animate-float-3d { animation: float-3d 6s ease-in-out infinite; }
-        .animate-card-appear { animation: card-appear 0.6s ease-out forwards; }
-        .animate-scale-in { animation: scale-in 0.3s ease-out forwards; }
-        .animate-bounce-in { animation: bounce-in 0.4s ease-out forwards; }
-        .animate-gradient-shift {
-          background-size: 200% 200%;
-          animation: gradient-shift 8s ease infinite;
-        }
-        .animate-border-flow { animation: border-flow 2s linear infinite; }
-        .animate-float-particle { animation: float-particle 4s ease-in-out infinite; }
-        .perspective-1000 { perspective: 1000px; }
-        .transform-style-3d { transform-style: preserve-3d; }
-        .rotate-y-6:hover { transform: rotateY(6deg); }
-        .shadow-3xl { box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.5); }
       `}</style>
     </div>
-  )
-}
+  );
+};
 
-export default SignUp
+export default SignUp;
