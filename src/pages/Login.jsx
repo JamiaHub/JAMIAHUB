@@ -1,41 +1,42 @@
-import React from 'react'
-import { useState } from 'react'
-import NavBar from './NavBar'
-import toast from "react-hot-toast"
-import { Link, useNavigate } from 'react-router'
-import { useQueryClient,useMutation } from '@tanstack/react-query'
-import { axiosInstance } from '../lib/axios'
+import React from "react";
+import { useState } from "react";
+import NavBar from "./NavBar";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { axiosInstance } from "../lib/axios";
+import { Eye, EyeOff } from "lucide-react";
 
 const login = () => {
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
-  })
-  
-  const queryClient = useQueryClient()
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const queryClient = useQueryClient();
   const { mutate, isPending, error } = useMutation({
-    mutationFn: async() => {
+    mutationFn: async () => {
       const response = await axiosInstance.post("/auth/login", loginData);
       return response.data;
     },
     onSuccess: (data) => {
       if (data.token) {
-        localStorage.setItem('jwt', data.token);
-        console.log('Token saved to localStorage');
+        localStorage.setItem("jwt", data.token);
+        console.log("Token saved to localStorage");
       }
-      queryClient.invalidateQueries({queryKey: ["authUser"]})
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
       toast.success("Logged In");
-      navigate("/")
-    }
-  })
+      navigate("/");
+    },
+  });
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     mutate();
-  }
+  };
 
-  if(error) return toast.error(error.response.data.message);
+  if (error) return toast.error(error.response.data.message);
 
   return (
     <div className="min-h-screen relative overflow-hidden" data-theme="forest">
@@ -55,11 +56,14 @@ const login = () => {
 
       {/* Grid pattern overlay */}
       <div className="absolute inset-0 z-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `linear-gradient(rgba(139, 92, 246, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.3) 1px, transparent 1px)`,
-          backgroundSize: '50px 50px',
-          animation: 'grid-move 20s linear infinite'
-        }}></div>
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `linear-gradient(rgba(139, 92, 246, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.3) 1px, transparent 1px)`,
+            backgroundSize: "50px 50px",
+            animation: "grid-move 20s linear infinite",
+          }}
+        ></div>
       </div>
 
       {/* Animated stars */}
@@ -92,7 +96,9 @@ const login = () => {
         <div className="w-full max-w-md">
           <div className="bg-transparent backdrop-blur-md rounded-2xl shadow-2xl shadow-purple-400 p-8 border border-base-300">
             <h2 className="text-3xl font-bold text-center mb-2">Login</h2>
-            <p className="text-center text-base-content/60 mb-6">Welcome back</p>
+            <p className="text-center text-base-content/60 mb-6">
+              Welcome back
+            </p>
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div className="form-control">
                 <label className="label">
@@ -103,7 +109,10 @@ const login = () => {
                   placeholder="Enter your email"
                   className="input input-bordered w-full"
                   value={loginData.email}
-                  onChange={(e) => setLoginData({...loginData, email: e.target.value})}
+                  onChange={(e) =>
+                    setLoginData({ ...loginData, email: e.target.value })
+                  }
+                  required
                 />
               </div>
 
@@ -111,23 +120,53 @@ const login = () => {
                 <label className="label">
                   <span className="label-text font-medium">Password</span>
                 </label>
-                <input
-                  type="password"
-                  placeholder="Enter your password"
-                  className="input input-bordered w-full"
-                  value={loginData.password}
-                  onChange={(e) => setLoginData({...loginData, password: e.target.value})}
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    className="input input-bordered w-full pr-10"
+                    value={loginData.password}
+                    onChange={(e) =>
+                      setLoginData({ ...loginData, password: e.target.value })
+                    }
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-base-content/60 hover:text-base-content"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
               </div>
-              <button type="submit" className="btn btn-primary w-full mt-6">
-                {isPending ? "Please wait a moment..." : "Login"}
+
+              <button
+                type="submit"
+                className="btn btn-primary w-full mt-6"
+                disabled={isPending}
+              >
+                {isPending ? (
+                  <>
+                    <span className="loading loading-spinner loading-sm"></span>
+                    Please wait...
+                  </>
+                ) : (
+                  "Login"
+                )}
               </button>
             </form>
 
-
             <p className="text-center text-sm mt-6 text-base-content/60">
-              Don't have an account?{' '}
-              <Link to="/signup" className="text-primary font-semibold hover:underline">
+              Don't have an account?{" "}
+              <Link
+                to="/signup"
+                className="text-primary font-semibold hover:underline"
+              >
                 Sign Up
               </Link>
             </p>
@@ -193,58 +232,6 @@ const login = () => {
           50% { opacity: 1; transform: scale(1.5); }
         }
         
-        @keyframes slide-up {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes gradient {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-        
-        @keyframes float-3d {
-          0%, 100% { transform: translateY(0) rotateZ(0deg); }
-          50% { transform: translateY(-20px) rotateZ(5deg); }
-        }
-        
-        @keyframes card-appear {
-          from { opacity: 0; transform: translateY(20px) scale(0.95); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        
-        @keyframes scale-in {
-          from { opacity: 0; transform: scale(0.9); }
-          to { opacity: 1; transform: scale(1); }
-        }
-        
-        @keyframes bounce-in {
-          0% { opacity: 0; transform: scale(0.5); }
-          50% { transform: scale(1.05); }
-          100% { opacity: 1; transform: scale(1); }
-        }
-        
-        @keyframes gradient-shift {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-        
-        @keyframes border-flow {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-        
-        @keyframes float-particle {
-          0%, 100% { 
-            transform: translate(0, 0); 
-            opacity: 0.4;
-          }
-          50% { 
-            transform: translate(10px, -15px); 
-            opacity: 0.8;
-          }
-        }
-        
         .animate-float-orb { animation: float-orb 15s ease-in-out infinite; }
         .animate-ray-1 { animation: ray-1 8s ease-in-out infinite; }
         .animate-ray-2 { animation: ray-2 10s ease-in-out infinite; }
@@ -253,33 +240,9 @@ const login = () => {
         .animation-delay-3000 { animation-delay: 3s; }
         .animation-delay-4000 { animation-delay: 4s; }
         .animate-twinkle { animation: twinkle 3s ease-in-out infinite; }
-        .animate-slide-up { animation: slide-up 0.8s ease-out forwards; }
-        .animation-delay-200 { animation-delay: 0.2s; }
-        .animation-delay-300 { animation-delay: 0.3s; }
-        .animation-delay-400 { animation-delay: 0.4s; }
-        .animation-delay-500 { animation-delay: 0.5s; }
-        .animation-delay-600 { animation-delay: 0.6s; }
-        .animate-gradient { 
-          background-size: 200% 200%;
-          animation: gradient 4s ease infinite;
-        }
-        .animate-float-3d { animation: float-3d 6s ease-in-out infinite; }
-        .animate-card-appear { animation: card-appear 0.6s ease-out forwards; }
-        .animate-scale-in { animation: scale-in 0.3s ease-out forwards; }
-        .animate-bounce-in { animation: bounce-in 0.4s ease-out forwards; }
-        .animate-gradient-shift {
-          background-size: 200% 200%;
-          animation: gradient-shift 8s ease infinite;
-        }
-        .animate-border-flow { animation: border-flow 2s linear infinite; }
-        .animate-float-particle { animation: float-particle 4s ease-in-out infinite; }
-        .perspective-1000 { perspective: 1000px; }
-        .transform-style-3d { transform-style: preserve-3d; }
-        .rotate-y-6:hover { transform: rotateY(6deg); }
-        .shadow-3xl { box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.5); }
       `}</style>
     </div>
-  )
-}
+  );
+};
 
-export default login
+export default login;
