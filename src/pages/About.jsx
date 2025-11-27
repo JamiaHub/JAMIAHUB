@@ -9,10 +9,12 @@ const about = () => {
   const teamMember = {
     name: "Mahtab Madni",
     image: profilePic,
-    description: "Hi, I'm Mahtab Madni — a passionate Web Developer and Artificial Intelligence Enthusiast dedicated to crafting innovative solutions that make a meaningful impact. Driven by curiosity and a love for learning, I continuously explore emerging technologies and creative approaches to problem-solving. I believe in the power of collaboration and knowledge-sharing to help communities grow, thrive, and succeed together.",
+    description:
+      "Hi, I'm Mahtab Madni — a passionate Web Developer and Artificial Intelligence Enthusiast dedicated to crafting innovative solutions that make a meaningful impact. Driven by curiosity and a love for learning, I continuously explore emerging technologies and creative approaches to problem-solving. I believe in the power of collaboration and knowledge-sharing to help communities grow, thrive, and succeed together.",
     branch: "ECE (2028)",
     linkedin: "https://www.linkedin.com/in/mahtab-madni-391364327",
-    instagram: "https://www.instagram.com/itz_mahtab25?igsh=ZmZvMmswcHEzcGU%3D"
+    instagram: "https://www.instagram.com/itz_mahtab25?igsh=ZmZvMmswcHEzcGU%3D",
+    github: "https://github.com/Mahtab-Madni",
   };
 
   const [formData, setFormData] = useState({
@@ -57,7 +59,7 @@ const about = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-gray-900" >
+    <div className="min-h-screen relative overflow-hidden bg-gray-900">
       {/* Cool animated colored background graphics */}
       {/* Fixed gradient overlay */}
       <div className="absolute inset-0 z-0 overflow-hidden">
@@ -74,11 +76,14 @@ const about = () => {
 
       {/* Grid pattern overlay */}
       <div className="absolute inset-0 z-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `linear-gradient(rgba(139, 92, 246, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.3) 1px, transparent 1px)`,
-          backgroundSize: '50px 50px',
-          animation: 'grid-move 20s linear infinite'
-        }}></div>
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `linear-gradient(rgba(139, 92, 246, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.3) 1px, transparent 1px)`,
+            backgroundSize: "50px 50px",
+            animation: "grid-move 20s linear infinite",
+          }}
+        ></div>
       </div>
 
       {/* Animated stars */}
@@ -107,7 +112,7 @@ const about = () => {
       </div>
 
       <NavBar />
-      
+
       {/* Main Content */}
       <div className="relative z-10 container mx-auto px-4 py-16">
         {/* About Section */}
@@ -115,14 +120,29 @@ const about = () => {
           <h1 className="text-5xl font-bold text-white text-center mb-12">
             About This Website
           </h1>
-          
+
           <div className="max-w-5xl mx-auto bg-gray-800 bg-opacity-50 backdrop-blur-sm rounded-2xl p-8 md:p-12 border border-gray-700 shadow-2xl">
             <p className="text-gray-200 text-lg leading-relaxed mb-6">
-              JamiaHub is a student-powered academic platform built by and for the vibrant community of Jamia Millia Islamia. Our mission is to create a unified space where students can easily access and share essential study resources, fostering a culture of collaboration and support. From detailed notes and previous year question papers (PYQs) to curated study guides and peer-contributed materials, JamiaHub brings everything you need under one roof. Whether you're prepping for exams or diving deeper into your coursework, this hub is designed to make your academic journey smoother and more connected.
+              JamiaHub is a student-powered academic platform built by and for
+              the vibrant community of Jamia Millia Islamia. Our mission is to
+              create a unified space where students can easily access and share
+              essential study resources, fostering a culture of collaboration
+              and support. From detailed notes and previous year question papers
+              (PYQs) to curated study guides and peer-contributed materials,
+              JamiaHub brings everything you need under one roof. Whether you're
+              prepping for exams or diving deeper into your coursework, this hub
+              is designed to make your academic journey smoother and more
+              connected.
             </p>
-            
+
             <p className="text-gray-200 text-lg leading-relaxed">
-             This platform also features a CGPA calculator to help you track your academic performance, group chats for real-time collaboration, blog writing tools to share insights and experiences, an event calendar to stay updated on campus happenings, and fun games to take a break from studying. We're constantly working to improve and expand JamiaHub, adding new features that support and empower our vibrant community.
+              This platform also features a CGPA calculator to help you track
+              your academic performance, group chats for real-time
+              collaboration, blog writing tools to share insights and
+              experiences, an event calendar to stay updated on campus
+              happenings, and fun games to take a break from studying. We're
+              constantly working to improve and expand JamiaHub, adding new
+              features that support and empower our vibrant community.
             </p>
           </div>
         </section>
@@ -132,14 +152,14 @@ const about = () => {
           <h2 className="text-5xl font-bold text-white text-center mb-16">
             Meet The Creator
           </h2>
-          
+
           <div className="max-w-2xl mx-auto">
             <div className="bg-gray-800 bg-opacity-60 backdrop-blur-sm rounded-2xl p-10 md:p-12 border border-gray-700 hover:border-purple-500 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20">
               {/* Profile Image */}
               <div className="flex justify-center mb-8">
                 <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-purple-500 shadow-lg">
-                  <img 
-                    src={teamMember.image} 
+                  <img
+                    src={teamMember.image}
                     alt={teamMember.name}
                     className="w-full h-full object-cover"
                   />
@@ -163,24 +183,48 @@ const about = () => {
 
               {/* Social Links */}
               <div className="flex justify-center gap-8">
-                <a 
+                <a
                   href={teamMember.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-400 hover:text-blue-400 transition-colors duration-300 transform hover:scale-110"
                 >
-                  <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                  <svg
+                    className="w-10 h-10"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
                   </svg>
                 </a>
-                <a 
+                <a
                   href={teamMember.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-400 hover:text-pink-400 transition-colors duration-300 transform hover:scale-110"
                 >
-                  <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                  <svg
+                    className="w-10 h-10"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                  </svg>
+                </a>
+                <a
+                  href={teamMember.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-white transition-colors duration-300 transform hover:scale-110"
+                >
+                  <svg
+                    className="w-10 h-10"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.089-.744.083-.729.083-.729  1.205.084 1.84 1.236 1.84 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.605-2.665-.305-5.466-1.332-5.466-5.93 0-1.31.468-2.381 1.236-3.221-.124-.303-.536-1.523.117-3.176 0 0 1.008-.322 3.301 1.23a11.52 11.52 0 013.003-.404c1.018.005 2.042.138 3.003.404 2.291-1.552 3.297-1.23 3.297-1.23.655 1.653.243 2.873.12 3.176.77.84 1.235 1.911 1.235 3.221 0 4.61-2.805 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .317.216.687.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12z"
+                    />
                   </svg>
                 </a>
               </div>
@@ -197,7 +241,9 @@ const about = () => {
           <div className="max-w-3xl mx-auto bg-gray-800 bg-opacity-60 backdrop-blur-sm rounded-2xl p-10 md:p-12 border border-gray-700 shadow-2xl">
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="email" className="block text-gray-300 mb-2">Email</label>
+                <label htmlFor="email" className="block text-gray-300 mb-2">
+                  Email
+                </label>
                 <input
                   type="email"
                   id="email"
@@ -211,7 +257,9 @@ const about = () => {
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-gray-300 mb-2">Message</label>
+                <label htmlFor="message" className="block text-gray-300 mb-2">
+                  Message
+                </label>
                 <textarea
                   id="message"
                   name="message"
@@ -224,13 +272,13 @@ const about = () => {
                 ></textarea>
               </div>
 
-              {submitStatus === 'success' && (
+              {submitStatus === "success" && (
                 <div className="text-green-400 text-center">
                   Thank you for your feedback!
                 </div>
               )}
 
-              {submitStatus === 'error' && (
+              {submitStatus === "error" && (
                 <div className="text-red-400 text-center">
                   Something went wrong. Please try again.
                 </div>
@@ -242,7 +290,7 @@ const about = () => {
                   disabled={isSubmitting}
                   className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
+                  {isSubmitting ? "Submitting..." : "Submit Feedback"}
                 </button>
               </div>
             </form>
