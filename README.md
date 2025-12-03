@@ -68,6 +68,3 @@ Feel free to open issues, submit PRs, or suggest improvements.
 # 📝 License
 This project is licensed under the MIT License — you are free to use, modify, and distribute it. <br/>
 
-👉 This version makes JamiaHub clearly your creation, while also showing off the tech stack you’ve mastered.
-Would you like me to also add a “Vision” section that explains JamiaHub’s mission (student collaboration, shared knowledge, community-driven platform)? That would make the README even more personal and inspiring.
-
