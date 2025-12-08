@@ -27,6 +27,7 @@ const Home = () => {
   const [branchSelect, setBranchSelect] = useState(false);
   const [selectedBranch, setSelectedBranch] = useState("");
   const [showSemOptions, setShowSemOptions] = useState(false);
+  const [emailError, setEmailError] = useState("");
 
   const handleBranchClick = (branch) => {
     setBranchSelect(true);
@@ -51,25 +52,55 @@ const Home = () => {
       ...prev,
       [name]: value
     }));
+
+    if (name === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (value && !emailRegex.test(value)) {
+        setEmailError("Please enter a valid email address");
+      } else {
+        setEmailError("");
+      }
+    }
   };
 
   const handleConnectSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate email before submitting
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!contactForm.email || !emailRegex.test(contactForm.email)) {
+      setEmailError("Please enter a valid email address");
+      setSubmitStatus("error");
+      return;
+    }
+
+    // Validate name
+    if (!contactForm.name.trim()) {
+      setSubmitStatus("error");
+      return;
+    }
+
+    // Validate message
+    if (!contactForm.message.trim()) {
+      setSubmitStatus("error");
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitStatus(null);
 
     try {
-      const response = await axiosInstance.post('/user/connect', contactForm);
+      const response = await axiosInstance.post("/user/connect", contactForm);
 
       if (response.status === 201) {
-        setSubmitStatus('success');
-        setContactForm({ name: '', email: '', message: '' });
+        setSubmitStatus("success");
+        setContactForm({ name: "", email: "", message: "" });
       } else {
-        setSubmitStatus('error');
+        setSubmitStatus("error");
       }
     } catch (error) {
-      console.error('Error submitting contact form:', error);
-      setSubmitStatus('error');
+      console.error("Error submitting contact form:", error);
+      setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
     }
@@ -109,11 +140,14 @@ const Home = () => {
 
       {/* Grid pattern overlay */}
       <div className="absolute inset-0 z-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `linear-gradient(rgba(139, 92, 246, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.3) 1px, transparent 1px)`,
-          backgroundSize: '50px 50px',
-          animation: 'grid-move 20s linear infinite'
-        }}></div>
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `linear-gradient(rgba(139, 92, 246, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.3) 1px, transparent 1px)`,
+            backgroundSize: "50px 50px",
+            animation: "grid-move 20s linear infinite",
+          }}
+        ></div>
       </div>
 
       {/* Animated stars */}
@@ -175,10 +209,10 @@ const Home = () => {
                   <stop offset="100%" stopColor="#818cf8" />
                 </linearGradient>
                 <filter id="glow">
-                  <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+                  <feGaussianBlur stdDeviation="5" result="coloredBlur" />
                   <feMerge>
-                    <feMergeNode in="coloredBlur"/>
-                    <feMergeNode in="SourceGraphic"/>
+                    <feMergeNode in="coloredBlur" />
+                    <feMergeNode in="SourceGraphic" />
                   </feMerge>
                 </filter>
               </defs>
@@ -229,23 +263,71 @@ const Home = () => {
               Resources By Branch
             </span>
           </h2>
-          
+
           {/* Hexagonal/Staggered Layout */}
           <div className="relative flex flex-wrap justify-center gap-6 mt-5">
             {branches.map((branch, idx) => {
               const colors = [
-                { from: 'from-purple-500/20', to: 'to-violet-600/20', glow: 'shadow-purple-500/50', border: 'border-purple-400/30', hover: 'hover:border-purple-400/60' },
-                { from: 'from-pink-500/20', to: 'to-rose-600/20', glow: 'shadow-pink-500/50', border: 'border-pink-400/30', hover: 'hover:border-pink-400/60' },
-                { from: 'from-blue-500/20', to: 'to-cyan-600/20', glow: 'shadow-blue-500/50', border: 'border-blue-400/30', hover: 'hover:border-blue-400/60' },
-                { from: 'from-emerald-500/20', to: 'to-teal-600/20', glow: 'shadow-emerald-500/50', border: 'border-emerald-400/30', hover: 'hover:border-emerald-400/60' },
-                { from: 'from-orange-500/20', to: 'to-amber-600/20', glow: 'shadow-orange-500/50', border: 'border-orange-400/30', hover: 'hover:border-orange-400/60' },
-                { from: 'from-indigo-500/20', to: 'to-blue-600/20', glow: 'shadow-indigo-500/50', border: 'border-indigo-400/30', hover: 'hover:border-indigo-400/60' },
-                { from: 'from-fuchsia-500/20', to: 'to-purple-600/20', glow: 'shadow-fuchsia-500/50', border: 'border-fuchsia-400/30', hover: 'hover:border-fuchsia-400/60' },
-                { from: 'from-cyan-500/20', to: 'to-sky-600/20', glow: 'shadow-cyan-500/50', border: 'border-cyan-400/30', hover: 'hover:border-cyan-400/60' },
+                {
+                  from: "from-purple-500/20",
+                  to: "to-violet-600/20",
+                  glow: "shadow-purple-500/50",
+                  border: "border-purple-400/30",
+                  hover: "hover:border-purple-400/60",
+                },
+                {
+                  from: "from-pink-500/20",
+                  to: "to-rose-600/20",
+                  glow: "shadow-pink-500/50",
+                  border: "border-pink-400/30",
+                  hover: "hover:border-pink-400/60",
+                },
+                {
+                  from: "from-blue-500/20",
+                  to: "to-cyan-600/20",
+                  glow: "shadow-blue-500/50",
+                  border: "border-blue-400/30",
+                  hover: "hover:border-blue-400/60",
+                },
+                {
+                  from: "from-emerald-500/20",
+                  to: "to-teal-600/20",
+                  glow: "shadow-emerald-500/50",
+                  border: "border-emerald-400/30",
+                  hover: "hover:border-emerald-400/60",
+                },
+                {
+                  from: "from-orange-500/20",
+                  to: "to-amber-600/20",
+                  glow: "shadow-orange-500/50",
+                  border: "border-orange-400/30",
+                  hover: "hover:border-orange-400/60",
+                },
+                {
+                  from: "from-indigo-500/20",
+                  to: "to-blue-600/20",
+                  glow: "shadow-indigo-500/50",
+                  border: "border-indigo-400/30",
+                  hover: "hover:border-indigo-400/60",
+                },
+                {
+                  from: "from-fuchsia-500/20",
+                  to: "to-purple-600/20",
+                  glow: "shadow-fuchsia-500/50",
+                  border: "border-fuchsia-400/30",
+                  hover: "hover:border-fuchsia-400/60",
+                },
+                {
+                  from: "from-cyan-500/20",
+                  to: "to-sky-600/20",
+                  glow: "shadow-cyan-500/50",
+                  border: "border-cyan-400/30",
+                  hover: "hover:border-cyan-400/60",
+                },
               ];
-              
+
               const color = colors[idx % colors.length];
-              
+
               return (
                 <div
                   key={branch}
@@ -258,37 +340,42 @@ const Home = () => {
                       ? "z-50 scale-110 -translate-y-2"
                       : ""
                   }`}
-                  style={{ 
+                  style={{
                     animationDelay: `${idx * 0.08}s`,
-                    transform: idx % 2 === 0 ? 'translateY(20px)' : 'translateY(0)' // Staggered effect
+                    transform:
+                      idx % 2 === 0 ? "translateY(20px)" : "translateY(0)", // Staggered effect
                   }}
                   onClick={() => !branchSelect && handleBranchClick(branch)}
                 >
                   {/* Animated background gradient */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${color.from} ${color.to} rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl ${color.glow}`}></div>
-                  
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${color.from} ${color.to} rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl ${color.glow}`}
+                  ></div>
+
                   {/* Main card */}
-                  <div className={`relative w-full h-full bg-gradient-to-br ${color.from} ${color.to} backdrop-blur-xl rounded-3xl shadow-2xl border ${color.border} ${color.hover} transition-all duration-500 overflow-hidden`}>
+                  <div
+                    className={`relative w-full h-full bg-gradient-to-br ${color.from} ${color.to} backdrop-blur-xl rounded-3xl shadow-2xl border ${color.border} ${color.hover} transition-all duration-500 overflow-hidden`}
+                  >
                     {/* Animated border gradient */}
                     <div className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                       <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-transparent via-white/20 to-transparent animate-border-flow"></div>
                     </div>
-                    
+
                     {/* Shine effect */}
                     <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl"></div>
-                    
+
                     {/* Content */}
                     <div className="relative z-10 w-full h-full flex flex-col items-center justify-center p-6">
                       {/* Icon/Symbol */}
                       <div className="mb-4 text-4xl md:text-5xl font-bold text-white/80 group-hover:text-white  duration-300 group-hover:scale-110 transform transition-all">
-                        {branch.split('').slice(0, 2).join('')}
+                        {branch.split("").slice(0, 2).join("")}
                       </div>
-                      
+
                       {/* Branch name */}
                       <h3 className="text-white text-center font-bold text-sm md:text-base leading-tight group-hover:scale-105 transform transition-transform">
                         {branch}
                       </h3>
-                      
+
                       {/* Floating particles inside card */}
                       <div className="absolute inset-0 pointer-events-none">
                         {[...Array(3)].map((_, i) => (
@@ -299,7 +386,7 @@ const Home = () => {
                               top: `${20 + i * 30}%`,
                               left: `${20 + i * 25}%`,
                               animationDelay: `${i * 0.5}s`,
-                              animationDuration: `${3 + i}s`
+                              animationDuration: `${3 + i}s`,
                             }}
                           />
                         ))}
@@ -316,19 +403,21 @@ const Home = () => {
                               Select Semester
                             </div>
                             <div className="grid grid-cols-4 gap-3 w-full px-2">
-                              {["1", "2", "3", "4", "5", "6", "7", "8"].map((semester, i) => (
-                                <button
-                                  key={semester}
-                                  className="px-2 py-2 text-sm rounded-2xl bg-gradient-to-br from-purple-600 to-blue-600 text-white font-semibold shadow-lg hover:scale-110 hover:shadow-purple-500/60 transition-all duration-300 animate-bounce-in border border-white/30"
-                                  style={{ animationDelay: `${i * 0.08}s` }}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleSemSelect(semester); // Make sure to define this handler
-                                  }}
-                                >
-                                  {semester}
-                                </button>
-                              ))}
+                              {["1", "2", "3", "4", "5", "6", "7", "8"].map(
+                                (semester, i) => (
+                                  <button
+                                    key={semester}
+                                    className="px-2 py-2 text-sm rounded-2xl bg-gradient-to-br from-purple-600 to-blue-600 text-white font-semibold shadow-lg hover:scale-110 hover:shadow-purple-500/60 transition-all duration-300 animate-bounce-in border border-white/30"
+                                    style={{ animationDelay: `${i * 0.08}s` }}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleSemSelect(semester); // Make sure to define this handler
+                                    }}
+                                  >
+                                    {semester}
+                                  </button>
+                                )
+                              )}
                             </div>
                             <button
                               className="mt-4 text-xs text-gray-400 hover:text-white transition-colors duration-300 underline"
@@ -368,20 +457,22 @@ const Home = () => {
               >
                 <div className="relative w-40 h-52 cursor-pointer transition-all duration-500 transform-style-3d hover:rotate-y-6 hover:-translate-y-2">
                   {/* Card front */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${game.color} rounded-2xl shadow-2xl backdrop-blur-xl border border-white/20 p-6 flex flex-col items-center justify-center transition-all duration-500 group-hover:shadow-3xl`}>
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${game.color} rounded-2xl shadow-2xl backdrop-blur-xl border border-white/20 p-6 flex flex-col items-center justify-center transition-all duration-500 group-hover:shadow-3xl`}
+                  >
                     {/* Shine effect */}
                     <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
-                    
+
                     {/* Icon */}
                     <div className="text-6xl mb-4 transform transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12">
                       {game.icon}
                     </div>
-                    
+
                     {/* Title */}
                     <h3 className="text-white text-center font-bold text-sm leading-tight">
                       {game.name}
                     </h3>
-                    
+
                     {/* Glow effect */}
                     <div className="absolute -inset-1 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 -z-10 rounded-2xl"></div>
                   </div>
@@ -396,13 +487,13 @@ const Home = () => {
           <div className="relative overflow-hidden rounded-3xl">
             {/* Animated gradient background */}
             <div className="absolute inset-0 bg-transparent"></div>
-            
+
             {/* Glass overlay */}
             <div className="relative backdrop-blur-2xl bg-white/5 border border-white/20 rounded-3xl p-8 shadow-2xl">
               <h2 className="text-center text-2xl lg:text-3xl font-semibold mb-6 bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">
                 Contact Us
               </h2>
-              
+
               <div className="space-y-5">
                 <div className="animate-slide-up animation-delay-300">
                   <label className="block text-white/90 mb-2 text-sm font-medium">
@@ -416,9 +507,9 @@ const Home = () => {
                     className="w-full px-4 py-3 rounded-xl border border-white/20 focus:outline-none focus:ring-2 focus:ring-gray-900/50 bg-white/10 backdrop-blur-xl text-white placeholder-white/40 transition-all duration-300"
                     placeholder="Your Name"
                     required
-                  />  
+                  />
                 </div>
-                
+
                 <div className="animate-slide-up animation-delay-400">
                   <label className="block text-white/90 mb-2 text-sm font-medium">
                     Email
@@ -428,12 +519,21 @@ const Home = () => {
                     name="email"
                     value={contactForm.email}
                     onChange={handleContactInputChange}
-                    className="w-full px-4 py-3 rounded-xl border border-white/20 focus:outline-none focus:ring-2 focus:ring-gray-900/50 bg-white/10 backdrop-blur-xl text-white placeholder-white/40 transition-all duration-300 "
+                    className={`w-full px-4 py-3 rounded-xl border ${
+                      emailError ? "border-red-500/60" : "border-white/20"
+                    } focus:outline-none focus:ring-2 ${
+                      emailError
+                        ? "focus:ring-red-500/50"
+                        : "focus:ring-gray-900/50"
+                    } bg-white/10 backdrop-blur-xl text-white placeholder-white/40 transition-all duration-300`}
                     placeholder="your.email@example.com"
                     required
                   />
+                  {emailError && (
+                    <p className="mt-2 text-sm text-red-400">{emailError}</p>
+                  )}
                 </div>
-                
+
                 <div className="animate-slide-up animation-delay-500">
                   <label className="block text-white/90 mb-2 text-sm font-medium">
                     Message
@@ -448,14 +548,14 @@ const Home = () => {
                     required
                   ></textarea>
                 </div>
-                
-                {submitStatus === 'success' && (
+
+                {submitStatus === "success" && (
                   <div className="text-green-400 text-center text-sm">
                     Message sent successfully!
                   </div>
                 )}
 
-                {submitStatus === 'error' && (
+                {submitStatus === "error" && (
                   <div className="text-red-400 text-center text-sm">
                     Failed to send message. Please try again.
                   </div>
@@ -468,7 +568,7 @@ const Home = () => {
                   className="w-full relative overflow-hidden bg-gradient-to-r from-pink-700 to-blue-700 text-white font-semibold py-3 rounded-xl transition-all duration-300 shadow-lg hover:shadow-purple-800 hover:scale-105 group animate-slide-up animation-delay-600 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <span className="relative z-10">
-                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                    {isSubmitting ? "Sending..." : "Send Message"}
                   </span>
                   <div className="absolute inset-0 bg-gradient-to-r from-pink-700 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </button>

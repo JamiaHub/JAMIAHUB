@@ -21,7 +21,7 @@ const about = () => {
     email: '',
     message: ''
   });
-
+  const [emailError, setEmailError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null); 
 
@@ -31,28 +31,51 @@ const about = () => {
       ...prev,
       [name]: value
     }));
+
+    if (name === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (value && !emailRegex.test(value)) {
+        setEmailError("Please enter a valid email address");
+      } else {
+        setEmailError("");
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
+
+    // Validate email before submitting
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!contactForm.email || !emailRegex.test(formData.email)) {
+      setEmailError("Please enter a valid email address");
+      setSubmitStatus("error");
+      return;
+    }
+
+    // Validate message
+    if (!contactForm.message.trim()) {
+      setSubmitStatus("error");
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitStatus(null);
 
     try {
-      const response = await axiosInstance.post('/user/feedback', formData);
+      const response = await axiosInstance.post("/user/feedback", formData);
 
       // Axios uses response.status, not response.ok
       if (response.status === 201) {
-        setSubmitStatus('success');
-        setFormData({ email: '', message: '' }); // Reset form
+        setSubmitStatus("success");
+        setFormData({ email: "", message: "" }); // Reset form
         toast.success("Feedback submitted");
       } else {
-        setSubmitStatus('error');
+        setSubmitStatus("error");
       }
     } catch (error) {
-      console.error('Error submitting feedback:', error);
-      setSubmitStatus('error');
+      console.error("Error submitting feedback:", error);
+      setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
     }
@@ -222,9 +245,7 @@ const about = () => {
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path
-                      d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.089-.744.083-.729.083-.729  1.205.084 1.84 1.236 1.84 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.605-2.665-.305-5.466-1.332-5.466-5.93 0-1.31.468-2.381 1.236-3.221-.124-.303-.536-1.523.117-3.176 0 0 1.008-.322 3.301 1.23a11.52 11.52 0 013.003-.404c1.018.005 2.042.138 3.003.404 2.291-1.552 3.297-1.23 3.297-1.23.655 1.653.243 2.873.12 3.176.77.84 1.235 1.911 1.235 3.221 0 4.61-2.805 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .317.216.687.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12z"
-                    />
+                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.089-.744.083-.729.083-.729  1.205.084 1.84 1.236 1.84 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.605-2.665-.305-5.466-1.332-5.466-5.93 0-1.31.468-2.381 1.236-3.221-.124-.303-.536-1.523.117-3.176 0 0 1.008-.322 3.301 1.23a11.52 11.52 0 013.003-.404c1.018.005 2.042.138 3.003.404 2.291-1.552 3.297-1.23 3.297-1.23.655 1.653.243 2.873.12 3.176.77.84 1.235 1.911 1.235 3.221 0 4.61-2.805 5.624-5.475 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .317.216.687.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12z" />
                   </svg>
                 </a>
               </div>
@@ -250,10 +271,19 @@ const about = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg bg-gray-900 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className={`w-full px-4 py-3 rounded-xl border ${
+                    emailError ? "border-red-500/60" : "border-gray-600"
+                  } focus:outline-none focus:ring-2 ${
+                    emailError
+                      ? "focus:ring-red-500/50"
+                      : "focus:ring-purple-500"
+                  } bg-gray-900 backdrop-blur-xl text-white transition-all duration-300`}
                   placeholder="you@example.com"
                   required
                 />
+                {emailError && (
+                  <p className="mt-2 text-sm text-red-400">{emailError}</p>
+                )}
               </div>
 
               <div>
