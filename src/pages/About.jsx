@@ -47,14 +47,8 @@ const about = () => {
 
     // Validate email before submitting
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!contactForm.email || !emailRegex.test(formData.email)) {
+    if (!formData.email || !emailRegex.test(formData.email)) {
       setEmailError("Please enter a valid email address");
-      setSubmitStatus("error");
-      return;
-    }
-
-    // Validate message
-    if (!contactForm.message.trim()) {
       setSubmitStatus("error");
       return;
     }
