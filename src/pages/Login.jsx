@@ -14,7 +14,11 @@ const login = () => {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+
   const queryClient = useQueryClient();
+
   const { mutate, isPending, error } = useMutation({
     mutationFn: async () => {
       const response = await axiosInstance.post("/auth/login", loginData);
@@ -31,9 +35,35 @@ const login = () => {
     },
   });
 
+  const { mutate: sendResetEmail, isPending: isResetting } = useMutation({
+    mutationFn: async () => {
+      const response = await axiosInstance.post("/auth/forgot-password", {
+        email: resetEmail,
+      });
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success("Password reset link sent to your email!");
+      setShowForgotPassword(false);
+      setResetEmail("");
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.message || "Failed to send reset email");
+    },
+  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     mutate();
+  };
+
+  const handleForgotPassword = async (e) => {
+    e.preventDefault();
+    if (!resetEmail) {
+      toast.error("Please enter your email");
+      return;
+    }
+    sendResetEmail();
   };
 
   if (error) return toast.error(error.response.data.message);
@@ -95,81 +125,147 @@ const login = () => {
       <div className="relative z-10 flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
         <div className="w-full max-w-md">
           <div className="bg-transparent backdrop-blur-md rounded-2xl shadow-2xl shadow-purple-400 p-8 border border-base-300">
-            <h2 className="text-3xl font-bold text-center mb-2">Login</h2>
-            <p className="text-center text-base-content/60 mb-6">
-              Welcome back
-            </p>
-            <form className="space-y-4" onSubmit={handleSubmit}>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text font-medium">Email</span>
-                </label>
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="input input-bordered w-full"
-                  value={loginData.email}
-                  onChange={(e) =>
-                    setLoginData({ ...loginData, email: e.target.value })
-                  }
-                  required
-                />
-              </div>
+            {!showForgotPassword ? (
+              <>
+                <h2 className="text-3xl font-bold text-center mb-2">Login</h2>
+                <p className="text-center text-base-content/60 mb-6">
+                  Welcome back
+                </p>
+                <form className="space-y-4" onSubmit={handleSubmit}>
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text font-medium">Email</span>
+                    </label>
+                    <input
+                      type="email"
+                      placeholder="Enter your email"
+                      className="input input-bordered w-full"
+                      value={loginData.email}
+                      onChange={(e) =>
+                        setLoginData({ ...loginData, email: e.target.value })
+                      }
+                      required
+                    />
+                  </div>
 
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text font-medium">Password</span>
-                </label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
-                    className="input input-bordered w-full pr-10"
-                    value={loginData.password}
-                    onChange={(e) =>
-                      setLoginData({ ...loginData, password: e.target.value })
-                    }
-                    required
-                  />
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text font-medium">Password</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter your password"
+                        className="input input-bordered w-full pr-10"
+                        value={loginData.password}
+                        onChange={(e) =>
+                          setLoginData({
+                            ...loginData,
+                            password: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-base-content/60 hover:text-base-content"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="w-5 h-5" />
+                        ) : (
+                          <Eye className="w-5 h-5" />
+                        )}
+                      </button>
+                    </div>
+                    <label className="label">
+                      <button
+                        type="button"
+                        onClick={() => setShowForgotPassword(true)}
+                        className="label-text-alt link link-hover text-primary"
+                      >
+                        Forgot password?
+                      </button>
+                    </label>
+                  </div>
+
                   <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-base-content/60 hover:text-base-content"
+                    type="submit"
+                    className="btn btn-primary w-full mt-6"
+                    disabled={isPending}
                   >
-                    {showPassword ? (
-                      <EyeOff className="w-5 h-5" />
+                    {isPending ? (
+                      <>
+                        <span className="loading loading-spinner loading-sm"></span>
+                        Please wait...
+                      </>
                     ) : (
-                      <Eye className="w-5 h-5" />
+                      "Login"
                     )}
                   </button>
-                </div>
-              </div>
+                </form>
 
-              <button
-                type="submit"
-                className="btn btn-primary w-full mt-6"
-                disabled={isPending}
-              >
-                {isPending ? (
-                  <>
-                    <span className="loading loading-spinner loading-sm"></span>
-                    Please wait...
-                  </>
-                ) : (
-                  "Login"
-                )}
-              </button>
-            </form>
+                <p className="text-center text-sm mt-6 text-base-content/60">
+                  Don't have an account?{" "}
+                  <Link
+                    to="/signup"
+                    className="text-primary font-semibold hover:underline"
+                  >
+                    Sign Up
+                  </Link>
+                </p>
+              </>
+            ) : (
+              <>
+                <h2 className="text-3xl font-bold text-center mb-2">
+                  Forgot Password
+                </h2>
+                <p className="text-center text-base-content/60 mb-6">
+                  Enter your email to receive a password reset link
+                </p>
+                <form className="space-y-4" onSubmit={handleForgotPassword}>
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text font-medium">Email</span>
+                    </label>
+                    <input
+                      type="email"
+                      placeholder="Enter your email"
+                      className="input input-bordered w-full"
+                      value={resetEmail}
+                      onChange={(e) => setResetEmail(e.target.value)}
+                      required
+                    />
+                  </div>
 
-            <p className="text-center text-sm mt-6 text-base-content/60">
-              Don't have an account?{" "}
-              <Link
-                to="/signup"
-                className="text-primary font-semibold hover:underline"
-              >
-                Sign Up
-              </Link>
-            </p>
+                  <button
+                    type="submit"
+                    className="btn btn-primary w-full mt-6"
+                    disabled={isResetting}
+                  >
+                    {isResetting ? (
+                      <>
+                        <span className="loading loading-spinner loading-sm"></span>
+                        Sending...
+                      </>
+                    ) : (
+                      "Send Reset Link"
+                    )}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowForgotPassword(false);
+                      setResetEmail("");
+                    }}
+                    className="btn btn-ghost w-full"
+                  >
+                    Back to Login
+                  </button>
+                </form>
+              </>
+            )}
           </div>
         </div>
       </div>

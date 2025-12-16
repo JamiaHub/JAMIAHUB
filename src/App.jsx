@@ -11,6 +11,7 @@ import toast, { Toaster } from "react-hot-toast"
 import useAuthUser from "./hook/useAuthUser"
 import PageLoader from "./components/PageLoader"
 import ScrollToTop from "./components/ScrollToTop"
+import ResetPassword from "./components/ResetPassword"
 
 export default function App() {
   const { isLoading } = useAuthUser;
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/cgpa" element={<Cgpa />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/games" element={<Game />} />
+          <Route path= "/reset-password/:token" element= {<ResetPassword />} />
         </Routes>
         
         <Toaster />
