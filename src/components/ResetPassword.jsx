@@ -4,7 +4,6 @@ import { useMutation } from "@tanstack/react-query";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 import { Eye, EyeOff } from "lucide-react";
-import NavBar from "../pages/NavBar";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -105,8 +104,6 @@ const ResetPassword = () => {
         <div className="absolute top-0 left-1/2 w-1 h-full bg-gradient-to-b from-pink-500 via-transparent to-transparent animate-ray-2"></div>
         <div className="absolute top-0 left-3/4 w-1 h-full bg-gradient-to-b from-blue-500 via-transparent to-transparent animate-ray-3"></div>
       </div>
-
-      <NavBar />
 
       <div className="relative z-10 flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
         <div className="w-full max-w-md">
