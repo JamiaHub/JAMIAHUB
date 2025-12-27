@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router";
+import { useNavigate, useSearchParams,Link } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
@@ -200,12 +200,12 @@ const ResetPassword = () => {
 
             <p className="text-center text-sm mt-6 text-base-content/60">
               Remember your password?{" "}
-              <a
-                href="/login"
+              <Link
+                to="/login"
                 className="text-primary font-semibold hover:underline"
               >
                 Back to Login
-              </a>
+              </Link>
             </p>
           </div>
         </div>
