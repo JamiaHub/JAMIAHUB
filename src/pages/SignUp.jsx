@@ -12,6 +12,7 @@ const SignUp = () => {
     name: "",
     email: "",
     password: "",
+    role: "",
     branch: "",
     sem: "",
   });
@@ -190,7 +191,7 @@ const SignUp = () => {
               </div>
             )}
 
-            <form className="space-y-4" onSubmit={handleSubmit}>
+            <form className="space-y-2" onSubmit={handleSubmit}>
               <div className="form-control">
                 <label className="label">
                   <span className="label-text font-medium">Full Name</span>
@@ -320,51 +321,75 @@ const SignUp = () => {
 
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text font-medium">Branch</span>
+                  <span className="label-text font-medium">Role</span>
                 </label>
                 <select
                   className="select select-bordered w-full"
-                  value={signUpData.branch}
+                  value={signUpData.role}
                   onChange={(e) =>
-                    setSignUpData({ ...signUpData, branch: e.target.value })
+                    setSignUpData({ ...signUpData, role: e.target.value })
                   }
                   required
                 >
-                  <option value="">Select your branch</option>
-                  <option value="CSE">Computer Science</option>
-                  <option value="ECE">Electronics & Communication</option>
-                  <option value="CE">Civil Engineering</option>
-                  <option value="ME">Mechanical Engineering</option>
-                  <option value="EE">Electrical Engineering</option>
-                  <option value="CS-DS">Computer Science - Data Science</option>
-                  <option value="VLSI">Electronics & VLSI</option>
-                  <option value="EE-CE">Electrical & Computer</option>
+                  <option value="">Select your role</option>
+                  <option value="admin">Admin</option>
+                  <option value="faculty">Faculty</option>
+                  <option value="student">Student</option>
+                  <option value="alumni">Alumni</option>
                 </select>
               </div>
 
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text font-medium">Semester</span>
-                </label>
-                <select
-                  className="select select-bordered w-full"
-                  value={signUpData.sem}
-                  onChange={(e) =>
-                    setSignUpData({ ...signUpData, sem: e.target.value })
-                  }
-                  required
-                >
-                  <option value="">Select your semester</option>
-                  <option value="1">1st Semester</option>
-                  <option value="2">2nd Semester</option>
-                  <option value="3">3rd Semester</option>
-                  <option value="4">4th Semester</option>
-                  <option value="5">5th Semester</option>
-                  <option value="6">6th Semester</option>
-                  <option value="7">7th Semester</option>
-                  <option value="8">8th Semester</option>
-                </select>
-              </div>
+              {signUpData.role === "student" && (
+                <>
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text font-medium">Branch</span>
+                    </label>
+                    <select
+                      className="select select-bordered w-full"
+                      value={signUpData.branch}
+                      onChange={(e) =>
+                        setSignUpData({ ...signUpData, branch: e.target.value })
+                      }
+                      required
+                    >
+                      <option value="">Select your branch</option>
+                      <option value="CSE">Computer Science</option>
+                      <option value="ECE">Electronics & Communication</option>
+                      <option value="CE">Civil Engineering</option>
+                      <option value="ME">Mechanical Engineering</option>
+                      <option value="EE">Electrical Engineering</option>
+                      <option value="CS-DS">Computer Science - Data Science</option>
+                      <option value="VLSI">Electronics & VLSI</option>
+                      <option value="EE-CE">Electrical & Computer</option>
+                    </select>
+                  </div>
+
+                  <div className="form-control">
+                    <label className="label">
+                      <span className="label-text font-medium">Semester</span>
+                    </label>
+                    <select
+                      className="select select-bordered w-full"
+                      value={signUpData.sem}
+                      onChange={(e) =>
+                        setSignUpData({ ...signUpData, sem: e.target.value })
+                      }
+                      required
+                    >
+                      <option value="">Select your semester</option>
+                      <option value="1">1st Semester</option>
+                      <option value="2">2nd Semester</option>
+                      <option value="3">3rd Semester</option>
+                      <option value="4">4th Semester</option>
+                      <option value="5">5th Semester</option>
+                      <option value="6">6th Semester</option>
+                      <option value="7">7th Semester</option>
+                      <option value="8">8th Semester</option>
+                    </select>
+                  </div>
+                </>
+              )}
 
               <button
                 type="submit"

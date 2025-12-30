@@ -12,6 +12,7 @@ import useAuthUser from "./hook/useAuthUser"
 import PageLoader from "./components/PageLoader"
 import ScrollToTop from "./components/ScrollToTop"
 import ResetPassword from "./components/ResetPassword"
+import Profile from "./pages/Profile"
 
 const AppContent = () => {
   const location = useLocation();
@@ -28,6 +29,7 @@ const AppContent = () => {
         <Route path="/cgpa" element={<Cgpa />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/games" element={<Game />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
 
