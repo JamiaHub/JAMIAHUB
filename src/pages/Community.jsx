@@ -223,7 +223,7 @@ const Community = () => {
     time: "",
     location: "",
     description: "",
-    attendees: 0,
+    attendees: "",
     category: "Technical",
     image: null,
     organizer: "",
@@ -425,7 +425,7 @@ const Community = () => {
           time: "",
           location: "",
           description: "",
-          attendees: 0,
+          attendees: "",
           category: "Technical",
           image: null,
           organizer: "",
@@ -1525,12 +1525,11 @@ const Community = () => {
                         Expected Attendees
                       </label>
                       <input
-                        type="number"
+                        type="text"
                         name="attendees"
                         value={newEvent.attendees}
                         onChange={handleEventInputChange}
-                        placeholder="0"
-                        min="0"
+                        placeholder="20"
                         className="w-full bg-gray-800 text-white px-4 py-2 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
                       />
                     </div>
