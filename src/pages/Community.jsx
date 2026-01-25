@@ -76,6 +76,8 @@ const Community = () => {
     "Academic",
     "Workshop",
     "Seminar",
+    "Entertainment",
+    "Career",
     "Other",
   ];
 
@@ -262,69 +264,6 @@ const Community = () => {
       fetchChatRooms();
     }
   }, [isChatOpen]);
-
-  // const [events, setEvents] = useState([
-  //   {
-  //     id: 1,
-  //     title: 'Tech Fest 2024',
-  //     date: '2024-11-15',
-  //     time: '10:00 AM - 6:00 PM',
-  //     location: 'Main Auditorium',
-  //     description: 'Annual technical festival featuring hackathons, workshops, and tech talks from industry experts.',
-  //     attendees: 500,
-  //     category: 'Technical',
-  //     image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400',
-  //     organizer: 'IEEE Student Branch'
-  //   },
-  //   {
-  //     id: 2,
-  //     title: 'Cultural Night',
-  //     date: '2024-11-20',
-  //     time: '7:00 PM - 11:00 PM',
-  //     location: 'Open Air Theatre',
-  //     description: 'Celebrate diversity with music, dance, and performances from students across all departments.',
-  //     attendees: 800,
-  //     category: 'Cultural',
-  //     image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400',
-  //     organizer: 'Cultural Committee'
-  //   },
-  //   {
-  //     id: 3,
-  //     title: 'Startup Pitch Competition',
-  //     date: '2024-11-25',
-  //     time: '2:00 PM - 5:00 PM',
-  //     location: 'Innovation Lab',
-  //     description: 'Present your startup ideas to industry mentors and win seed funding for your venture.',
-  //     attendees: 150,
-  //     category: 'Business',
-  //     image: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=400',
-  //     organizer: 'E-Cell JMI'
-  //   },
-  //   {
-  //     id: 4,
-  //     title: 'AI/ML Workshop',
-  //     date: '2024-11-28',
-  //     time: '11:00 AM - 4:00 PM',
-  //     location: 'Computer Lab 3',
-  //     description: 'Hands-on workshop on machine learning fundamentals and practical applications.',
-  //     attendees: 100,
-  //     category: 'Workshop',
-  //     image: 'https://images.unsplash.com/photo-1555255707-c07966088b7b?w=400',
-  //     organizer: 'GDSC JMI'
-  //   },
-  //   {
-  //     id: 5,
-  //     title: 'Career Guidance Seminar',
-  //     date: '2024-12-02',
-  //     time: '3:00 PM - 5:00 PM',
-  //     location: 'Seminar Hall',
-  //     description: 'Alumni panel discussion on career paths, placements, and higher education opportunities.',
-  //     attendees: 300,
-  //     category: 'Seminar',
-  //     image: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=400',
-  //     organizer: 'Placement Cell'
-  //   }
-  // ]);
 
   useEffect(() => {
     async function fetchEvents() {
