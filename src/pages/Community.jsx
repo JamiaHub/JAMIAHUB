@@ -498,8 +498,8 @@ const Community = () => {
       link: "https://www.instagram.com/w3b__jmi/",
     },
     {
-      name: "SoarX JMI",
-      logo: "https://media.licdn.com/dms/image/v2/D4D22AQGdaUrRzu9Z2g/feedshare-shrink_2048_1536/feedshare-shrink_2048_1536/0/1728653643770?e=2147483647&v=beta&t=q5JPkh02Qw8JoTlwmhgagWryU7Wxy4mHwTk1GKfgttA",
+      name: "Soar JMI",
+      logo: "https://media.licdn.com/dms/image/v2/D560BAQG6xupD-VJyrA/company-logo_200_200/B56ZZYnDekGQAI-/0/1745243356962/soarx_jmi_logo?e=2147483647&v=beta&t=5VwAa1wWmug853NunWjmn5Aslip9w0g7-JiCVip8LA8",
       color: "from-amber-500/20 to-yellow-500/20",
       border: "border-amber-400/30",
       desc: "Innovation & Impact",
